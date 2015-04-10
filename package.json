@@ -1,0 +1,33 @@
+{
+  "name": "lucid-router",
+  "version": "0.0.1",
+  "description": "a simple html5-history aware router",
+  "main": "dist/lucid.js",
+  "scripts": {
+    "compile": "babel src/lucid.js --out-file dist/lucid.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/spicydonuts/lucid-router.git"
+  },
+  "keywords": [
+    "lucid",
+    "router",
+    "routing",
+    "history",
+    "react"
+  ],
+  "author": "Michael Trotter",
+  "license": "GPL",
+  "bugs": {
+    "url": "https://github.com/spicydonuts/lucid-router/issues"
+  },
+  "homepage": "https://github.com/spicydonuts/lucid-router",
+  "dependencies": {
+    "url-pattern": "^0.7.0"
+  },
+  "devDependencies": {
+    "babel": "^5.0.12"
+  }
+}

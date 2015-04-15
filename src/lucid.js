@@ -60,9 +60,9 @@ export function navigate(path, e) {
   }
   if (hasHistoryApi) {
     if (typeof path !== 'string' || !path) throw typeError(path, 'lucid-router.navigate expected a non empty string as its first parameter');
-    const match = match(path);
-    if (match && !match.route.external) {
-      const location = matchAndPathToLocation(match, path);
+    const m = match(path);
+    if (m && !m.route.external) {
+      const location = matchAndPathToLocation(m, path);
       history.pushState({location}, '', path);
       onLocationChange(location);
       return;

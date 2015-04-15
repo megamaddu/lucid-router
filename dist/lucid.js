@@ -33,17 +33,17 @@ var onLocationChange = function onLocationChange(location) {
 var routes = [];
 
 function addRoutes(newRoutes) {
-  if (!(routes instanceof Array)) throw typeError(routes, 'Floo expects to be passed a routing array as its first parameter');
+  if (!(routes instanceof Array)) throw typeError(routes, 'lucid-router expects to be passed a routing array as its first parameter');
   for (var routeIdx in newRoutes) {
     var route = newRoutes[routeIdx];
-    if (!(route instanceof Object)) throw typeError(routes, 'Floo expects each route definition to be an object');
+    if (!(route instanceof Object)) throw typeError(routes, 'lucid-router expects each route definition to be an object');
     route.path = route.path || null;
     route.name = route.name || null;
     route.external = !!route.external;
     try {
       route.pattern = new _Pattern2['default'](route.path);
     } catch (err) {
-      throw typeError(route.path, 'Floo expects route paths to be a string or regex expression');
+      throw typeError(route.path, 'lucid-router expects route paths to be a string or regex expression');
     }
     routes.push(route);
   }
@@ -81,10 +81,10 @@ function navigate(path, e) {
     e.stopPropagation();
   }
   if (hasHistoryApi) {
-    if (typeof path !== 'string' || !path) throw typeError(path, 'Floo.navigate expected a non empty string as its first parameter');
-    var _match = _match(path);
-    if (_match && !_match.route.external) {
-      var _location = matchAndPathToLocation(_match, path);
+    if (typeof path !== 'string' || !path) throw typeError(path, 'lucid-router.navigate expected a non empty string as its first parameter');
+    var m = match(path);
+    if (m && !m.route.external) {
+      var _location = matchAndPathToLocation(m, path);
       history.pushState({ location: _location }, '', path);
       onLocationChange(_location);
       return;
@@ -102,7 +102,7 @@ function navigatorFor(path) {
 }
 
 function register(callback) {
-  if (typeof callback !== 'function') throw typeError(callback, 'Floo expects to be passed a callback function');
+  if (typeof callback !== 'function') throw typeError(callback, 'lucid-router expects to be passed a callback function');
   locationChangeCallbacks.push(callback);
   return function unregister() {
     var idx = locationChangeCallbacks.indexOf(callback);

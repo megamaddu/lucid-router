@@ -4,7 +4,7 @@ Simple (lucid) html5 history-aware router.  Extracted from (and now being used b
 
 Thanks to `url-pattern` for most of the route/pattern work.
 
-Quickstart
+example
 --------
 ```js
 var router = require('lucid-router');

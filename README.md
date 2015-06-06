@@ -1,13 +1,10 @@
 # lucid-router
 
-hey there!  this is a super-simple html5-history aware router.
-i'll push it to version `1.0.0` as soon as i have installed it via npm to confirm it works.
+Simple (lucid) html5 history-aware router.  Extracted from (and now being used by) a production React app for both client and server routing (gotta get that isomorphic buzz word in there).
 
-docs/examples/tests coming soon!
+Thanks to `url-pattern` for most of the route/pattern work.
 
-thanks to `url-pattern` for most of the route/pattern work.
-
-quick-start
+Quickstart
 --------
 ```js
 var router = require('lucid-router');

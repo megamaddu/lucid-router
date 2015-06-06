@@ -10,7 +10,7 @@ example
 var router = require('lucid-router');
 
 router.addRoutes([
-  {name: 'a-key-you-can-use-later', path: '/some/path(/:optionalParam)', external: true-if-you-always-want-a-full-page-load-but-want-to-capture-params-on-that-page}
+  {name: 'a-key-you-can-use-later', path: '/some/path(/:optionalParam)', external: 'optional, set to `true` if you always want a full page load but still want to capture params on that page'}
 ])
 
 router.getLocation() // => an object with route info (name, path, state)

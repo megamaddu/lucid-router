@@ -1,7 +1,5 @@
 'use strict';
 
-var _interopRequireWildcard = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
-
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
@@ -13,9 +11,11 @@ exports.navigatorFor = navigatorFor;
 exports.register = register;
 exports.getLocation = getLocation;
 
-var _Pattern = require('url-pattern');
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var _Pattern2 = _interopRequireWildcard(_Pattern);
+var _urlPattern = require('url-pattern');
+
+var _urlPattern2 = _interopRequireDefault(_urlPattern);
 
 var window = global.window;
 var history = global.history;
@@ -41,7 +41,7 @@ function addRoutes(newRoutes) {
     route.name = route.name || null;
     route.external = !!route.external;
     try {
-      route.pattern = new _Pattern2['default'](route.path);
+      route.pattern = new _urlPattern2['default'](route.path);
     } catch (err) {
       throw typeError(route.path, 'lucid-router expects route paths to be a string or regex expression');
     }
@@ -50,9 +50,8 @@ function addRoutes(newRoutes) {
 }
 
 function removeRoute(name) {
-  if (!name) {
-    return;
-  }var idx = -1;
+  if (!name) return;
+  var idx = -1;
   for (var routeIdx in routes) {
     if (routes[routeIdx].name === name) {
       idx = routeIdx;
@@ -66,17 +65,14 @@ function match(path) {
   for (var routeIdx in routes) {
     var route = routes[routeIdx];
     var m = route.pattern.match(path);
-    if (m) {
-      return { route: route, state: m };
-    }
+    if (m) return { route: route, state: m };
   }
   return null;
 }
 
 function navigate(path, e) {
-  if (e && e.defaultPrevented) {
-    return;
-  }if (e && e.preventDefault && e.stopPropagation) {
+  if (e && e.defaultPrevented) return;
+  if (e && e.preventDefault && e.stopPropagation) {
     e.preventDefault();
     e.stopPropagation();
   }
@@ -119,7 +115,7 @@ function getLocation(path) {
 }
 
 function matchAndPathToLocation(m, p) {
-  return !m ? null : { p: p, name: m.route.name, state: m.state };
+  return !m ? null : { path: p, name: m.route.name, state: m.state };
 }
 
 if (hasHistoryApi && window) {

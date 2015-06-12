@@ -97,7 +97,7 @@ export function getLocation(path) {
 function matchAndPathToLocation(m, p) {
   return !m
     ? null
-    : {p, name: m.route.name, state: m.state};
+    : {path: p, name: m.route.name, state: m.state};
 }
 
 if (hasHistoryApi && window) {

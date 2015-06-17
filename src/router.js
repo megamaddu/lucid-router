@@ -44,10 +44,20 @@ export function removeRoute(name) {
 }
 
 export function match(path) {
+  const [pathname,query] = path.split('?');
+  const queryArgs = {};
+  if (query) {
+    query.split('&')
+      .map(keyValStr => keyValStr.split('=')
+        .map(encoded => decodeURIComponent(encoded)))
+      .forEach(([key,val]) => queryArgs[key] = val);
+  }
   for (let routeIdx in routes) {
     const route = routes[routeIdx];
-    const m = route.pattern.match(path);
-    if (m) return {route, state: m};
+    const m = route.pattern.match(pathname);
+    if (!m) return null;
+    Object.keys(m).forEach(key => queryArgs[key] = m[key]);
+    return {route, state: queryArgs};
   }
   return null;
 }
@@ -89,7 +99,7 @@ export function register(callback) {
 function getWindowPathAndQuery() {
   const {location} = window;
   if (!location) return null;
-  return location.pathname + location.search + location.hash;
+  return location.pathname + location.search;
 }
 
 export function getLocation(path) {

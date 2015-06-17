@@ -13,6 +13,8 @@ exports.getLocation = getLocation;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
+function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i['return']) _i['return'](); } finally { if (_d) throw _e; } } return _arr; } else { throw new TypeError('Invalid attempt to destructure non-iterable instance'); } }
+
 var _urlPattern = require('url-pattern');
 
 var _urlPattern2 = _interopRequireDefault(_urlPattern);
@@ -62,10 +64,46 @@ function removeRoute(name) {
 }
 
 function match(path) {
-  for (var routeIdx in routes) {
+  var _path$split = path.split('?');
+
+  var _path$split2 = _slicedToArray(_path$split, 2);
+
+  var pathname = _path$split2[0];
+  var query = _path$split2[1];
+
+  var queryArgs = {};
+  if (query) {
+    query.split('&').map(function (keyValStr) {
+      return keyValStr.split('=').map(function (encoded) {
+        return decodeURIComponent(encoded);
+      });
+    }).forEach(function (_ref) {
+      var _ref2 = _slicedToArray(_ref, 2);
+
+      var key = _ref2[0];
+      var val = _ref2[1];
+      return queryArgs[key] = val;
+    });
+  }
+
+  var _loop = function (routeIdx) {
     var route = routes[routeIdx];
-    var m = route.pattern.match(path);
-    if (m) return { route: route, state: m };
+    var m = route.pattern.match(pathname);
+    if (!m) return {
+        v: null
+      };
+    Object.keys(m).forEach(function (key) {
+      return queryArgs[key] = m[key];
+    });
+    return {
+      v: { route: route, state: queryArgs }
+    };
+  };
+
+  for (var routeIdx in routes) {
+    var _ret = _loop(routeIdx);
+
+    if (typeof _ret === 'object') return _ret.v;
   }
   return null;
 }
@@ -110,7 +148,7 @@ function getWindowPathAndQuery() {
   var location = window.location;
 
   if (!location) return null;
-  return location.pathname + location.search + location.hash;
+  return location.pathname + location.search;
 }
 
 function getLocation(path) {

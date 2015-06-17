@@ -106,8 +106,15 @@ function register(callback) {
   };
 }
 
+function getWindowPathAndQuery() {
+  var location = window.location;
+
+  if (!location) return null;
+  return location.pathname + location.search + location.hash;
+}
+
 function getLocation(path) {
-  path = path || window.location.pathname;
+  path = path || getWindowPathAndQuery();
   var m = match(path);
   var location = matchAndPathToLocation(m, path);
   onLocationChange(location);

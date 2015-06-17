@@ -86,8 +86,14 @@ export function register(callback) {
   };
 }
 
+function getWindowPathAndQuery() {
+  const {location} = window;
+  if (!location) return null;
+  return location.pathname + location.search + location.hash;
+}
+
 export function getLocation(path) {
-  path = path || window.location.pathname;
+  path = path || getWindowPathAndQuery();
   const m = match(path);
   const location = matchAndPathToLocation(m, path);
   onLocationChange(location);

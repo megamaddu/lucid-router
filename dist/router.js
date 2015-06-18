@@ -89,9 +89,7 @@ function match(path) {
   var _loop = function (routeIdx) {
     var route = routes[routeIdx];
     var m = route.pattern.match(pathname);
-    if (!m) return {
-        v: null
-      };
+    if (!m) return 'continue';
     Object.keys(m).forEach(function (key) {
       return queryArgs[key] = m[key];
     });
@@ -103,7 +101,13 @@ function match(path) {
   for (var routeIdx in routes) {
     var _ret = _loop(routeIdx);
 
-    if (typeof _ret === 'object') return _ret.v;
+    switch (_ret) {
+      case 'continue':
+        continue;
+
+      default:
+        if (typeof _ret === 'object') return _ret.v;
+    }
   }
   return null;
 }

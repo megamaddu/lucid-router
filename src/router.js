@@ -119,7 +119,7 @@ function matchAndPathToLocation(m, p) {
 if (hasHistoryApi && window) {
   window.addEventListener(
     'popstate',
-    e => onLocationChange(e.state && e.state.location),
+    ({state}) => state && state.location && onLocationChange(state.location),
     false);
 }
 

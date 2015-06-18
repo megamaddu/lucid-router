@@ -168,8 +168,9 @@ function matchAndPathToLocation(m, p) {
 }
 
 if (hasHistoryApi && window) {
-  window.addEventListener('popstate', function (e) {
-    return onLocationChange(e.state && e.state.location);
+  window.addEventListener('popstate', function (_ref3) {
+    var state = _ref3.state;
+    return state && state.location && onLocationChange(state.location);
   }, false);
 }
 

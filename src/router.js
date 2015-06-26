@@ -10,7 +10,7 @@ const hasHistoryApi =
 
 const locationChangeCallbacks = [];
 
-const onLocationChange = location => locationChangeCallbacks.forEach((cb) => cb(location));
+const onLocationChange = location => locationChangeCallbacks.forEach(cb => cb(location));
 
 const routes = [];
 
@@ -21,7 +21,9 @@ export function addRoutes(newRoutes) {
     if (!(route instanceof Object)) throw typeError(routes, 'lucid-router expects each route definition to be an object');
     route.path = route.path || null;
     route.name = route.name || null;
-    route.external = !!route.external;
+    route.external = typeof route.external === 'function'
+      ? route.external
+      : !!route.external;
     try {
       route.pattern = new Pattern(route.path);
     } catch (err) {
@@ -40,7 +42,7 @@ export function removeRoute(name) {
       break;
     }
   }
-  ~idx && locationChangeCallbacks.splice(idx, 1);
+  ~idx && routes.splice(idx, 1);
 }
 
 export function match(path) {
@@ -71,7 +73,7 @@ export function navigate(path, e) {
   if (hasHistoryApi) {
     if (typeof path !== 'string' || !path) throw typeError(path, 'lucid-router.navigate expected a non empty string as its first parameter');
     const m = match(path);
-    if (m && !m.route.external) {
+    if (m && notExternal(m)) {
       const location = matchAndPathToLocation(m, path);
       history.pushState({location}, '', path);
       onLocationChange(location);
@@ -88,7 +90,7 @@ export function navigatorFor(path) {
 }
 
 export function register(callback) {
-  if (typeof callback !== 'function') throw typeError(callback, 'lucid-router expects to be passed a callback function');
+  if (typeof callback !== 'function') throw typeError(callback, 'lucid-router.register expects to be passed a callback function');
   locationChangeCallbacks.push(callback);
   return function unregister() {
     const idx = locationChangeCallbacks.indexOf(callback);
@@ -114,6 +116,13 @@ function matchAndPathToLocation(m, p) {
   return !m
     ? null
     : {path: p, name: m.route.name, state: m.state};
+}
+
+function notExternal(m) {
+  const {external} = m.route;
+  if (typeof external === 'function') {
+    return !external(m);
+  } else return !external;
 }
 
 if (hasHistoryApi && window) {

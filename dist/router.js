@@ -3,6 +3,9 @@
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
+
+var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i['return']) _i['return'](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError('Invalid attempt to destructure non-iterable instance'); } }; })();
+
 exports.addRoutes = addRoutes;
 exports.removeRoute = removeRoute;
 exports.match = match;
@@ -12,8 +15,6 @@ exports.register = register;
 exports.getLocation = getLocation;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i['return']) _i['return'](); } finally { if (_d) throw _e; } } return _arr; } else { throw new TypeError('Invalid attempt to destructure non-iterable instance'); } }
 
 var _urlPattern = require('url-pattern');
 
@@ -41,7 +42,7 @@ function addRoutes(newRoutes) {
     if (!(route instanceof Object)) throw typeError(routes, 'lucid-router expects each route definition to be an object');
     route.path = route.path || null;
     route.name = route.name || null;
-    route.external = !!route.external;
+    route.external = typeof route.external === 'function' ? route.external : !!route.external;
     try {
       route.pattern = new _urlPattern2['default'](route.path);
     } catch (err) {
@@ -60,7 +61,7 @@ function removeRoute(name) {
       break;
     }
   }
-  ~idx && locationChangeCallbacks.splice(idx, 1);
+  ~idx && routes.splice(idx, 1);
 }
 
 function match(path) {
@@ -121,7 +122,7 @@ function navigate(path, e) {
   if (hasHistoryApi) {
     if (typeof path !== 'string' || !path) throw typeError(path, 'lucid-router.navigate expected a non empty string as its first parameter');
     var m = match(path);
-    if (m && !m.route.external) {
+    if (m && notExternal(m)) {
       var _location = matchAndPathToLocation(m, path);
       history.pushState({ location: _location }, '', path);
       onLocationChange(_location);
@@ -140,7 +141,7 @@ function navigatorFor(path) {
 }
 
 function register(callback) {
-  if (typeof callback !== 'function') throw typeError(callback, 'lucid-router expects to be passed a callback function');
+  if (typeof callback !== 'function') throw typeError(callback, 'lucid-router.register expects to be passed a callback function');
   locationChangeCallbacks.push(callback);
   return function unregister() {
     var idx = locationChangeCallbacks.indexOf(callback);
@@ -165,6 +166,14 @@ function getLocation(path) {
 
 function matchAndPathToLocation(m, p) {
   return !m ? null : { path: p, name: m.route.name, state: m.state };
+}
+
+function notExternal(m) {
+  var external = m.route.external;
+
+  if (typeof external === 'function') {
+    return !external(m);
+  } else return !external;
 }
 
 if (hasHistoryApi && window) {

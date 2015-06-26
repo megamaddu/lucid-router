@@ -1,6 +1,6 @@
 {
   "name": "lucid-router",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "description": "a simple html5-history aware router",
   "main": "dist/router.js",
   "scripts": {
@@ -19,7 +19,7 @@
     "react"
   ],
   "author": "Michael Trotter",
-  "license": "GPL",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/spicydonuts/lucid-router/issues"
   },

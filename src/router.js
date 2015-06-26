@@ -75,7 +75,7 @@ export function navigate(path, e) {
     const m = match(path);
     if (m && notExternal(m)) {
       const location = matchAndPathToLocation(m, path);
-      history.pushState({location}, '', path);
+      history.pushState(null, '', path);
       onLocationChange(location);
       return;
     }
@@ -126,10 +126,15 @@ function notExternal(m) {
 }
 
 if (hasHistoryApi && window) {
-  window.addEventListener(
-    'popstate',
-    ({state}) => state && state.location && onLocationChange(state.location),
-    false);
+  window.addEventListener('popstate', function(e) {
+    const path = getWindowPathAndQuery();
+    const m = match(path);
+    if (m && notExternal(m)) {
+      const location = matchAndPathToLocation(m, path);
+      onLocationChange(location);
+      return;
+    }
+  }, false);
 }
 
 function typeError(type, msg) {

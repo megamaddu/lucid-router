@@ -124,7 +124,7 @@ function navigate(path, e) {
     var m = match(path);
     if (m && notExternal(m)) {
       var _location = matchAndPathToLocation(m, path);
-      history.pushState({ location: _location }, '', path);
+      history.pushState(null, '', path);
       onLocationChange(_location);
       return;
     }
@@ -177,9 +177,14 @@ function notExternal(m) {
 }
 
 if (hasHistoryApi && window) {
-  window.addEventListener('popstate', function (_ref3) {
-    var state = _ref3.state;
-    return state && state.location && onLocationChange(state.location);
+  window.addEventListener('popstate', function (e) {
+    var path = getWindowPathAndQuery();
+    var m = match(path);
+    if (m && notExternal(m)) {
+      var _location2 = matchAndPathToLocation(m, path);
+      onLocationChange(_location2);
+      return;
+    }
   }, false);
 }
 

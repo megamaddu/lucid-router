@@ -46,7 +46,8 @@ export function removeRoute(name) {
 }
 
 export function match(path) {
-  const [pathname,query] = path.split('?');
+  const [pathnameAndQuery,hash] = path.split('#');
+  const [pathname,query] = pathnameAndQuery.split('?');
   const queryArgs = {};
   if (query) {
     query.split('&')
@@ -59,7 +60,7 @@ export function match(path) {
     const m = route.pattern.match(pathname);
     if (!m) continue;
     Object.keys(m).forEach(key => queryArgs[key] = m[key]);
-    return {route, state: queryArgs};
+    return {route, hash, state: queryArgs};
   }
   return null;
 }
@@ -101,7 +102,7 @@ export function register(callback) {
 function getWindowPathAndQuery() {
   const {location} = window;
   if (!location) return null;
-  return location.pathname + location.search;
+  return location.pathname + location.search + location.hash;
 }
 
 export function getLocation(path) {

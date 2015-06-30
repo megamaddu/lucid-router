@@ -65,12 +65,19 @@ function removeRoute(name) {
 }
 
 function match(path) {
-  var _path$split = path.split('?');
+  var _path$split = path.split('#');
 
   var _path$split2 = _slicedToArray(_path$split, 2);
 
-  var pathname = _path$split2[0];
-  var query = _path$split2[1];
+  var pathnameAndQuery = _path$split2[0];
+  var hash = _path$split2[1];
+
+  var _pathnameAndQuery$split = pathnameAndQuery.split('?');
+
+  var _pathnameAndQuery$split2 = _slicedToArray(_pathnameAndQuery$split, 2);
+
+  var pathname = _pathnameAndQuery$split2[0];
+  var query = _pathnameAndQuery$split2[1];
 
   var queryArgs = {};
   if (query) {
@@ -95,7 +102,7 @@ function match(path) {
       return queryArgs[key] = m[key];
     });
     return {
-      v: { route: route, state: queryArgs }
+      v: { route: route, hash: hash, state: queryArgs }
     };
   };
 
@@ -153,7 +160,7 @@ function getWindowPathAndQuery() {
   var location = window.location;
 
   if (!location) return null;
-  return location.pathname + location.search;
+  return location.pathname + location.search + location.hash;
 }
 
 function getLocation(path) {

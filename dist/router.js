@@ -64,24 +64,12 @@ function removeRoute(name) {
   ~idx && routes.splice(idx, 1);
 }
 
-function match(path) {
-  var _path$split = path.split('#');
-
-  var _path$split2 = _slicedToArray(_path$split, 2);
-
-  var pathnameAndQuery = _path$split2[0];
-  var hash = _path$split2[1];
-
-  var _pathnameAndQuery$split = pathnameAndQuery.split('?');
-
-  var _pathnameAndQuery$split2 = _slicedToArray(_pathnameAndQuery$split, 2);
-
-  var pathname = _pathnameAndQuery$split2[0];
-  var query = _pathnameAndQuery$split2[1];
-
+function parseQuery(query) {
   var queryArgs = {};
   if (query) {
-    query.split('&').map(function (keyValStr) {
+    query.split('&').filter(function (keyValStr) {
+      return !!keyValStr;
+    }).map(function (keyValStr) {
       return keyValStr.split('=').map(function (encoded) {
         return decodeURIComponent(encoded);
       });
@@ -90,9 +78,35 @@ function match(path) {
 
       var key = _ref2[0];
       var val = _ref2[1];
-      return queryArgs[key] = val;
+      return key && (queryArgs[key] = val);
     });
   }
+  return queryArgs;
+}
+
+function match(path) {
+  var _path$split = path.split('#');
+
+  var _path$split2 = _slicedToArray(_path$split, 2);
+
+  var pathnameAndQuery = _path$split2[0];
+  var hashAndHashQuery = _path$split2[1];
+
+  var _pathnameAndQuery$split = pathnameAndQuery.split('?');
+
+  var _pathnameAndQuery$split2 = _slicedToArray(_pathnameAndQuery$split, 2);
+
+  var pathname = _pathnameAndQuery$split2[0];
+  var query = _pathnameAndQuery$split2[1];
+
+  var _hashAndHashQuery$split = hashAndHashQuery.split('?');
+
+  var _hashAndHashQuery$split2 = _slicedToArray(_hashAndHashQuery$split, 2);
+
+  var hash = _hashAndHashQuery$split2[0];
+  var hashQuery = _hashAndHashQuery$split2[1];
+
+  var queryArgs = parseQuery([query, hashQuery].join('&'));
 
   var _loop = function (routeIdx) {
     var route = routes[routeIdx];

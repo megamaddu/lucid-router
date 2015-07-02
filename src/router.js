@@ -45,16 +45,23 @@ export function removeRoute(name) {
   ~idx && routes.splice(idx, 1);
 }
 
-export function match(path) {
-  const [pathnameAndQuery,hash] = path.split('#');
-  const [pathname,query] = pathnameAndQuery.split('?');
+function parseQuery(query) {
   const queryArgs = {};
   if (query) {
     query.split('&')
+      .filter(keyValStr => !!keyValStr)
       .map(keyValStr => keyValStr.split('=')
         .map(encoded => decodeURIComponent(encoded)))
-      .forEach(([key,val]) => queryArgs[key] = val);
+      .forEach(([key,val]) => key && (queryArgs[key] = val));
   }
+  return queryArgs;
+}
+
+export function match(path) {
+  const [pathnameAndQuery,hashAndHashQuery] = path.split('#');
+  const [pathname,query] = pathnameAndQuery.split('?');
+  const [hash,hashQuery] = hashAndHashQuery.split('?');
+  const queryArgs = parseQuery([query,hashQuery].join('&'));
   for (let routeIdx in routes) {
     const route = routes[routeIdx];
     const m = route.pattern.match(pathname);

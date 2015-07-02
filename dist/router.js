@@ -106,7 +106,7 @@ function match(path) {
   var hash = _ref32[0];
   var hashQuery = _ref32[1];
 
-  var queryArgs = parseQuery(hashQuery ? [query, hashQuery].join('&') : query);
+  var queryArgs = parseQuery([query, hashQuery].join('&'));
 
   var _loop = function (routeIdx) {
     var route = routes[routeIdx];
@@ -140,6 +140,7 @@ function navigate(path, e, replace) {
     e.preventDefault();
     e.stopPropagation();
   }
+  path = getFullPath(path);
   if (hasHistoryApi) {
     if (typeof path !== 'string' || !path) throw typeError(path, 'lucid-router.navigate expected a non empty string as its first parameter');
     var m = match(path);
@@ -173,6 +174,20 @@ function register(callback) {
     ~idx && locationChangeCallbacks.splice(idx, 1);
   };
 }
+
+function getFullPath(path) {
+  if (window) {
+    var a = window.document.createElement('a');
+    a.href = path;
+    if (a.host === window.location.host) {
+      path = a.pathname + a.search + a.hash;
+    } else {
+      path = a.href;
+    }
+  }
+  return path;
+}
+path = getFullRelativePath(path);
 
 function getWindowPathAndQuery() {
   var location = window.location;

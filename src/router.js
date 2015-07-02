@@ -63,10 +63,7 @@ export function match(path) {
   const [hash,hashQuery] = hashAndHashQuery
     ? hashAndHashQuery.split('?')
     : [];
-  const queryArgs = parseQuery(
-    hashQuery
-      ? [query,hashQuery].join('&')
-      : query);
+  const queryArgs = parseQuery([query,hashQuery].join('&'));
   for (let routeIdx in routes) {
     const route = routes[routeIdx];
     const m = route.pattern.match(pathname);
@@ -83,6 +80,7 @@ export function navigate(path, e, replace) {
     e.preventDefault();
     e.stopPropagation();
   }
+  path = getFullPath(path);
   if (hasHistoryApi) {
     if (typeof path !== 'string' || !path) throw typeError(path, 'lucid-router.navigate expected a non empty string as its first parameter');
     const m = match(path);
@@ -114,6 +112,20 @@ export function register(callback) {
     ~idx && locationChangeCallbacks.splice(idx, 1);
   };
 }
+
+function getFullPath(path) {
+  if (window) {
+    const a = window.document.createElement('a');
+    a.href = path;
+    if (a.host === window.location.host) {
+      path = a.pathname + a.search + a.hash;
+    } else {
+      path = a.href;
+    }
+  }
+  return path;
+}
+  path = getFullRelativePath(path);
 
 function getWindowPathAndQuery() {
   const {location} = window;

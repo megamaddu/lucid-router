@@ -99,14 +99,14 @@ function match(path) {
   var pathname = _pathnameAndQuery$split2[0];
   var query = _pathnameAndQuery$split2[1];
 
-  var _hashAndHashQuery$split = hashAndHashQuery.split('?');
+  var _ref3 = hashAndHashQuery ? hashAndHashQuery.split('?') : [];
 
-  var _hashAndHashQuery$split2 = _slicedToArray(_hashAndHashQuery$split, 2);
+  var _ref32 = _slicedToArray(_ref3, 2);
 
-  var hash = _hashAndHashQuery$split2[0];
-  var hashQuery = _hashAndHashQuery$split2[1];
+  var hash = _ref32[0];
+  var hashQuery = _ref32[1];
 
-  var queryArgs = parseQuery([query, hashQuery].join('&'));
+  var queryArgs = parseQuery(hashQuery ? [query, hashQuery].join('&') : query);
 
   var _loop = function (routeIdx) {
     var route = routes[routeIdx];

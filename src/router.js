@@ -60,8 +60,13 @@ function parseQuery(query) {
 export function match(path) {
   const [pathnameAndQuery,hashAndHashQuery] = path.split('#');
   const [pathname,query] = pathnameAndQuery.split('?');
-  const [hash,hashQuery] = hashAndHashQuery.split('?');
-  const queryArgs = parseQuery([query,hashQuery].join('&'));
+  const [hash,hashQuery] = hashAndHashQuery
+    ? hashAndHashQuery.split('?')
+    : [];
+  const queryArgs = parseQuery(
+    hashQuery
+      ? [query,hashQuery].join('&')
+      : query);
   for (let routeIdx in routes) {
     const route = routes[routeIdx];
     const m = route.pattern.match(pathname);

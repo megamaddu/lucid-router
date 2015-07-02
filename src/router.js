@@ -68,7 +68,7 @@ export function match(path) {
     const route = routes[routeIdx];
     const m = route.pattern.match(pathname);
     if (!m) continue;
-    Object.keys(m).forEach(key => queryArgs[key] = m[key]);
+    Object.keys(m).forEach(key => state[key] = m[key]);
     return {route,pathname,search,hash,hashSearch,state};
   }
   return null;

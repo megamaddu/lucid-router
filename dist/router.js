@@ -113,7 +113,7 @@ function match(path) {
     var m = route.pattern.match(pathname);
     if (!m) return 'continue';
     Object.keys(m).forEach(function (key) {
-      return queryArgs[key] = m[key];
+      return state[key] = m[key];
     });
     return {
       v: { route: route, pathname: pathname, search: search, hash: hash, hashSearch: hashSearch, state: state }

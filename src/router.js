@@ -125,7 +125,6 @@ function getFullPath(path) {
   }
   return path;
 }
-  path = getFullRelativePath(path);
 
 function getWindowPathAndQuery() {
   const {location} = window;

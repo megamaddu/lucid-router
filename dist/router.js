@@ -187,7 +187,6 @@ function getFullPath(path) {
   }
   return path;
 }
-path = getFullRelativePath(path);
 
 function getWindowPathAndQuery() {
   var location = window.location;

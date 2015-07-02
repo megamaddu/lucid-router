@@ -97,16 +97,16 @@ function match(path) {
   var _pathnameAndQuery$split2 = _slicedToArray(_pathnameAndQuery$split, 2);
 
   var pathname = _pathnameAndQuery$split2[0];
-  var query = _pathnameAndQuery$split2[1];
+  var search = _pathnameAndQuery$split2[1];
 
   var _ref3 = hashAndHashQuery ? hashAndHashQuery.split('?') : [];
 
   var _ref32 = _slicedToArray(_ref3, 2);
 
   var hash = _ref32[0];
-  var hashQuery = _ref32[1];
+  var hashSearch = _ref32[1];
 
-  var queryArgs = parseQuery([query, hashQuery].join('&'));
+  var state = parseQuery([search, hashSearch].join('&'));
 
   var _loop = function (routeIdx) {
     var route = routes[routeIdx];
@@ -116,7 +116,7 @@ function match(path) {
       return queryArgs[key] = m[key];
     });
     return {
-      v: { route: route, hash: hash, state: queryArgs }
+      v: { route: route, pathname: pathname, search: search, hash: hash, hashSearch: hashSearch, state: state }
     };
   };
 
@@ -204,7 +204,15 @@ function getLocation(path) {
 }
 
 function matchAndPathToLocation(m, p) {
-  return !m ? null : { path: p, name: m.route.name, state: m.state };
+  return !m ? null : {
+    path: p,
+    name: m.route.name,
+    pathname: m.pathname,
+    search: m.search,
+    hash: m.hash,
+    hashSearch: m.hashSearch,
+    state: m.state
+  };
 }
 
 function notExternal(m) {

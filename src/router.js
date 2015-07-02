@@ -59,17 +59,17 @@ function parseQuery(query) {
 
 export function match(path) {
   const [pathnameAndQuery,hashAndHashQuery] = path.split('#');
-  const [pathname,query] = pathnameAndQuery.split('?');
-  const [hash,hashQuery] = hashAndHashQuery
+  const [pathname,search] = pathnameAndQuery.split('?');
+  const [hash,hashSearch] = hashAndHashQuery
     ? hashAndHashQuery.split('?')
     : [];
-  const queryArgs = parseQuery([query,hashQuery].join('&'));
+  const state = parseQuery([search,hashSearch].join('&'));
   for (let routeIdx in routes) {
     const route = routes[routeIdx];
     const m = route.pattern.match(pathname);
     if (!m) continue;
     Object.keys(m).forEach(key => queryArgs[key] = m[key]);
-    return {route, hash, state: queryArgs};
+    return {route,pathname,search,hash,hashSearch,state};
   }
   return null;
 }
@@ -143,7 +143,15 @@ export function getLocation(path) {
 function matchAndPathToLocation(m, p) {
   return !m
     ? null
-    : {path: p, name: m.route.name, state: m.state};
+    : {
+      path: p,
+      name: m.route.name,
+      pathname: m.pathname,
+      search: m.search,
+      hash: m.hash,
+      hashSearch: m.hashSearch,
+      state: m.state
+    };
 }
 
 function notExternal(m) {

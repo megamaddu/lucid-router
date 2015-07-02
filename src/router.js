@@ -65,7 +65,7 @@ export function match(path) {
   return null;
 }
 
-export function navigate(path, e) {
+export function navigate(path, e, replace) {
   if (e && e.defaultPrevented) return;
   if (e && e.preventDefault && e.stopPropagation) {
     e.preventDefault();
@@ -76,7 +76,11 @@ export function navigate(path, e) {
     const m = match(path);
     if (m && notExternal(m)) {
       const location = matchAndPathToLocation(m, path);
-      history.pushState(null, '', path);
+      if (replace) {
+        history.replaceState(null, '', path);
+      } else {
+        history.pushState(null, '', path);
+      }
       onLocationChange(location);
       return;
     }
@@ -86,8 +90,8 @@ export function navigate(path, e) {
   }
 }
 
-export function navigatorFor(path) {
-  return e => navigate(path, e);
+export function navigatorFor(path, replace) {
+  return e => navigate(path, e, replace);
 }
 
 export function register(callback) {

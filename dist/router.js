@@ -120,7 +120,7 @@ function match(path) {
   return null;
 }
 
-function navigate(path, e) {
+function navigate(path, e, replace) {
   if (e && e.defaultPrevented) return;
   if (e && e.preventDefault && e.stopPropagation) {
     e.preventDefault();
@@ -131,7 +131,11 @@ function navigate(path, e) {
     var m = match(path);
     if (m && notExternal(m)) {
       var _location = matchAndPathToLocation(m, path);
-      history.pushState(null, '', path);
+      if (replace) {
+        history.replaceState(null, '', path);
+      } else {
+        history.pushState(null, '', path);
+      }
       onLocationChange(_location);
       return;
     }
@@ -141,9 +145,9 @@ function navigate(path, e) {
   }
 }
 
-function navigatorFor(path) {
+function navigatorFor(path, replace) {
   return function (e) {
-    return navigate(path, e);
+    return navigate(path, e, replace);
   };
 }
 

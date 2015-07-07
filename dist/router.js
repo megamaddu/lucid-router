@@ -116,7 +116,13 @@ function match(path) {
       return state[key] = m[key];
     });
     return {
-      v: { route: route, pathname: pathname, search: search, hash: hash, hashSearch: hashSearch, state: state }
+      v: {
+        route: route,
+        pathname: pathname,
+        search: search ? '?'.concat(search) : search,
+        hash: hash ? '#'.concat(hash) : hash,
+        hashSearch: hashSearch ? '?'.concat(hashSearch) : hashSearch,
+        state: state }
     };
   };
 

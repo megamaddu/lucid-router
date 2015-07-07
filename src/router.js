@@ -69,7 +69,13 @@ export function match(path) {
     const m = route.pattern.match(pathname);
     if (!m) continue;
     Object.keys(m).forEach(key => state[key] = m[key]);
-    return {route,pathname,search,hash,hashSearch,state};
+    return {
+      route,
+      pathname,
+      search: search?'?'.concat(search):search,
+      hash: hash?'#'.concat(hash):hash,
+      hashSearch: hashSearch?'?'.concat(hashSearch):hashSearch,
+      state};
   }
   return null;
 }

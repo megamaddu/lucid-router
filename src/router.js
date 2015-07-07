@@ -72,9 +72,9 @@ export function match(path) {
     return {
       route,
       pathname,
-      search: search?'?'.concat(search):search,
-      hash: hash?'#'.concat(hash):hash,
-      hashSearch: hashSearch?'?'.concat(hashSearch):hashSearch,
+      search: search?'?'.concat(search):'',
+      hash: hash?'#'.concat(hash):'',
+      hashSearch: hashSearch?'?'.concat(hashSearch):'',
       state};
   }
   return null;

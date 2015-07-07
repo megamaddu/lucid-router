@@ -119,9 +119,9 @@ function match(path) {
       v: {
         route: route,
         pathname: pathname,
-        search: search ? '?'.concat(search) : search,
-        hash: hash ? '#'.concat(hash) : hash,
-        hashSearch: hashSearch ? '?'.concat(hashSearch) : hashSearch,
+        search: search ? '?'.concat(search) : '',
+        hash: hash ? '#'.concat(hash) : '',
+        hashSearch: hashSearch ? '?'.concat(hashSearch) : '',
         state: state }
     };
   };

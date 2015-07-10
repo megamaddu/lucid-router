@@ -185,6 +185,7 @@ function getFullPath(path) {
   if (window) {
     var a = window.document.createElement('a');
     a.href = path;
+    if (!a.host) a.href = a.href; /* IE hack */
     if (a.host === window.location.host) {
       path = a.pathname + a.search + a.hash;
     } else {

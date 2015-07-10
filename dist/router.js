@@ -188,6 +188,10 @@ function getFullPath(path) {
     if (!a.host) a.href = a.href; /* IE hack */
     if (a.hostname === window.location.hostname) {
       path = a.pathname + a.search + a.hash;
+      if (path[0] !== '/') {
+        /* more IE hacks */
+        path = '/' + path;
+      }
     } else {
       path = a.href;
     }

@@ -1,46 +1,8 @@
 /* @flow */
 
-import Pattern from 'url-pattern';
+import urlPattern from 'url-pattern';
 
-declare class UrlPattern {
-  match(pathname: string): Object;
-}
-
-declare function NavigationCallback(e: Event): void;
-declare function RouteMatchCallback(): void;
-declare function UnregisterLocationChangeCallback(): void;
-
-type RouteSpec = {
-  name: string,
-  path: string,
-  external?: boolean | RouteMatchCallback
-};
-type Route = {
-  name: string,
-  path: string,
-  external?: boolean | RouteMatchCallback,
-  pattern: UrlPattern
-};
-type RouterMatch = {
-  route: Route,
-  pathname: string,
-  search: string,
-  hash: string,
-  hashSearch: string,
-  state: Object
-};
-type RouterLocation = {
-  path: string,
-  name: string,
-  pathname: string,
-  search: string,
-  hash: string,
-  hashSearch: string,
-  state: Object
-};
-
-declare function LocationChangeCallback(location: ?RouterLocation): void;
-
+var Pattern = (urlPattern: UrlPattern);
 var window: any  = global.window;
 var history: History = global.history;
 
@@ -64,7 +26,7 @@ export function addRoutes(newRoutes: ?Array<RouteSpec>): void {
       ? route.external
       : !!route.external;
     try {
-      route.pattern = new Pattern(route.path);
+      route.pattern = new UrlPattern(route.path);
     } catch (err) {
       throw typeError(route.path, 'lucid-router expects route paths to be a string or regex expression');
     }

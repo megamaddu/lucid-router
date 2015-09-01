@@ -1,8 +1,10 @@
 [ignore]
-.*/dist/.*
+.*/lucid-router/dist/.*
 
 [include]
+.*/lucid-router/src/.*
 
 [libs]
+lib/
 
 [options]

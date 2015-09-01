@@ -34,8 +34,7 @@ export function addRoutes(newRoutes: ?Array<RouteSpec>): void {
   }
 }
 
-export function removeRoute(name: ?string): void {
-  if (!name) return;
+export function removeRoute(name: string): void {
   var idx = -1;
   for (var i = 0, l = routes.length; i < l; i++) {
     if (routes[i].name === name) {
@@ -64,18 +63,18 @@ export function match(path: string): ?RouterMatch {
   var [hash,hashSearch] = hashAndHashQuery
     ? hashAndHashQuery.split('?')
     : [];
-  var state = parseQuery([search,hashSearch].join('&'));
+  var queryState = parseQuery([search,hashSearch].join('&'));
   for (var route of routes) {
-    var m = route.pattern.match(pathname);
-    if (!m) continue;
-    Object.keys(m).forEach(key => state[key] = m[key]);
+    var matchState = route.pattern.match(pathname);
+    if (!matchState) continue;
     return {
       route,
       pathname,
       search: search?'?'.concat(search):'',
       hash: hash?'#'.concat(hash):'',
       hashSearch: hashSearch?'?'.concat(hashSearch):'',
-      state};
+      state: {...queryState, ...matchState}
+    };
   }
   return null;
 }
@@ -108,6 +107,15 @@ export function navigate(path: string, e: ?Event, replace: ?boolean): void {
 
 export function navigatorFor(path: string, replace: ?bool): NavigationCallback {
   return e => navigate(path, e, replace);
+}
+
+export function pathFor(routeName: string, params: Object): string {
+  for (var route of routes) {
+    if (route.name === routeName) {
+      return route.pattern.stringify(params);
+    }
+  }
+  throw new Error(`lucid-router.pathFor failed to find a route with the name '${routeName}'`);
 }
 
 export function register(callback: RouteMatchCallback): UnregisterLocationChangeCallback {

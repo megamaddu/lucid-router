@@ -8,11 +8,14 @@ Object.defineProperty(exports, '__esModule', {
 
 var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i['return']) _i['return'](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError('Invalid attempt to destructure non-iterable instance'); } }; })();
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 exports.addRoutes = addRoutes;
 exports.removeRoute = removeRoute;
 exports.match = match;
 exports.navigate = navigate;
 exports.navigatorFor = navigatorFor;
+exports.pathFor = pathFor;
 exports.register = register;
 exports.getLocation = getLocation;
 
@@ -22,6 +25,7 @@ var _urlPattern = require('url-pattern');
 
 var _urlPattern2 = _interopRequireDefault(_urlPattern);
 
+var Pattern = _urlPattern2['default'];
 var window = global.window;
 var history = global.history;
 
@@ -46,7 +50,7 @@ function addRoutes(newRoutes) {
       route.name = route.name || null;
       route.external = typeof route.external === 'function' ? route.external : !!route.external;
       try {
-        route.pattern = new _urlPattern2['default'](route.path);
+        route.pattern = new UrlPattern(route.path);
       } catch (err) {
         throw typeError(route.path, 'lucid-router expects route paths to be a string or regex expression');
       }
@@ -69,7 +73,6 @@ function addRoutes(newRoutes) {
 }
 
 function removeRoute(name) {
-  if (!name) return;
   var idx = -1;
   for (var i = 0, l = routes.length; i < l; i++) {
     if (routes[i].name === name) {
@@ -122,7 +125,7 @@ function match(path) {
   var hash = _ref32[0];
   var hashSearch = _ref32[1];
 
-  var state = parseQuery([search, hashSearch].join('&'));
+  var queryState = parseQuery([search, hashSearch].join('&'));
   var _iteratorNormalCompletion2 = true;
   var _didIteratorError2 = false;
   var _iteratorError2 = undefined;
@@ -131,18 +134,16 @@ function match(path) {
     for (var _iterator2 = routes[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
       var route = _step2.value;
 
-      var m = route.pattern.match(pathname);
-      if (!m) continue;
-      Object.keys(m).forEach(function (key) {
-        return state[key] = m[key];
-      });
+      var matchState = route.pattern.match(pathname);
+      if (!matchState) continue;
       return {
         route: route,
         pathname: pathname,
         search: search ? '?'.concat(search) : '',
         hash: hash ? '#'.concat(hash) : '',
         hashSearch: hashSearch ? '?'.concat(hashSearch) : '',
-        state: state };
+        state: _extends({}, queryState, matchState)
+      };
     }
   } catch (err) {
     _didIteratorError2 = true;
@@ -192,6 +193,37 @@ function navigatorFor(path, replace) {
   return function (e) {
     return navigate(path, e, replace);
   };
+}
+
+function pathFor(routeName, params) {
+  var _iteratorNormalCompletion3 = true;
+  var _didIteratorError3 = false;
+  var _iteratorError3 = undefined;
+
+  try {
+    for (var _iterator3 = routes[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+      var route = _step3.value;
+
+      if (route.name === routeName) {
+        return route.pattern.stringify(params);
+      }
+    }
+  } catch (err) {
+    _didIteratorError3 = true;
+    _iteratorError3 = err;
+  } finally {
+    try {
+      if (!_iteratorNormalCompletion3 && _iterator3['return']) {
+        _iterator3['return']();
+      }
+    } finally {
+      if (_didIteratorError3) {
+        throw _iteratorError3;
+      }
+    }
+  }
+
+  throw new Error('lucid-router.pathFor failed to find a route with the name \'' + routeName + '\'');
 }
 
 function register(callback) {

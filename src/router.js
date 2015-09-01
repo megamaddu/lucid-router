@@ -1,24 +1,63 @@
+/* @flow */
+
 import Pattern from 'url-pattern';
 
-const window  = global.window;
-const history = global.history;
+declare class UrlPattern {
+  match(pathname: string): Object;
+}
 
-const hasHistoryApi =
+declare function NavigationCallback(e: Event): void;
+declare function RouteMatchCallback(): void;
+declare function UnregisterLocationChangeCallback(): void;
+
+type RouteSpec = {
+  name: string,
+  path: string,
+  external?: boolean | RouteMatchCallback
+};
+type Route = {
+  name: string,
+  path: string,
+  external?: boolean | RouteMatchCallback,
+  pattern: UrlPattern
+};
+type RouterMatch = {
+  route: Route,
+  pathname: string,
+  search: string,
+  hash: string,
+  hashSearch: string,
+  state: Object
+};
+type RouterLocation = {
+  path: string,
+  name: string,
+  pathname: string,
+  search: string,
+  hash: string,
+  hashSearch: string,
+  state: Object
+};
+
+declare function LocationChangeCallback(location: ?RouterLocation): void;
+
+var window: any  = global.window;
+var history: History = global.history;
+
+var hasHistoryApi: boolean = (
   window !== undefined &&
   history !== undefined &&
-  typeof history.pushState === 'function';
+  typeof history.pushState === 'function'
+);
 
-const locationChangeCallbacks = [];
+var locationChangeCallbacks: Array<NavigationCallback> = [];
 
-const onLocationChange = location => locationChangeCallbacks.forEach(cb => cb(location));
+var routes: Array<Route> = [];
 
-const routes = [];
-
-export function addRoutes(newRoutes) {
-  if (!(routes instanceof Array)) throw typeError(routes, 'lucid-router expects to be passed a routing array as its first parameter');
-  for (let routeIdx in newRoutes) {
-    let route = newRoutes[routeIdx];
-    if (!(route instanceof Object)) throw typeError(routes, 'lucid-router expects each route definition to be an object');
+export function addRoutes(newRoutes: ?Array<RouteSpec>): void {
+  if (!(newRoutes instanceof Array)) throw typeError(routes, 'lucid-router expects to be passed a routing array as its first parameter');
+  for (var route of newRoutes) {
+    if (route === null || !(route instanceof Object)) throw typeError(routes, 'lucid-router expects each route definition to be an object');
     route.path = route.path || null;
     route.name = route.name || null;
     route.external = typeof route.external === 'function'
@@ -33,12 +72,12 @@ export function addRoutes(newRoutes) {
   }
 }
 
-export function removeRoute(name) {
+export function removeRoute(name: ?string): void {
   if (!name) return;
-  let idx = -1;
-  for (let routeIdx in routes) {
-    if (routes[routeIdx].name === name) {
-      idx = routeIdx;
+  var idx = -1;
+  for (var i = 0, l = routes.length; i < l; i++) {
+    if (routes[i].name === name) {
+      idx = i;
       break;
     }
   }
@@ -46,7 +85,7 @@ export function removeRoute(name) {
 }
 
 function parseQuery(query) {
-  const queryArgs = {};
+  var queryArgs = {};
   if (query) {
     query.split('&')
       .filter(keyValStr => !!keyValStr)
@@ -57,16 +96,15 @@ function parseQuery(query) {
   return queryArgs;
 }
 
-export function match(path) {
-  const [pathnameAndQuery,hashAndHashQuery] = path.split('#');
-  const [pathname,search] = pathnameAndQuery.split('?');
-  const [hash,hashSearch] = hashAndHashQuery
+export function match(path: string): ?RouterMatch {
+  var [pathnameAndQuery,hashAndHashQuery] = path.split('#');
+  var [pathname,search] = pathnameAndQuery.split('?');
+  var [hash,hashSearch] = hashAndHashQuery
     ? hashAndHashQuery.split('?')
     : [];
-  const state = parseQuery([search,hashSearch].join('&'));
-  for (let routeIdx in routes) {
-    const route = routes[routeIdx];
-    const m = route.pattern.match(pathname);
+  var state = parseQuery([search,hashSearch].join('&'));
+  for (var route of routes) {
+    var m = route.pattern.match(pathname);
     if (!m) continue;
     Object.keys(m).forEach(key => state[key] = m[key]);
     return {
@@ -80,7 +118,7 @@ export function match(path) {
   return null;
 }
 
-export function navigate(path, e, replace) {
+export function navigate(path: string, e: ?Event, replace: ?boolean): void {
   if (e && e.defaultPrevented) return;
   if (e && e.preventDefault && e.stopPropagation) {
     e.preventDefault();
@@ -89,9 +127,9 @@ export function navigate(path, e, replace) {
   path = getFullPath(path);
   if (hasHistoryApi) {
     if (typeof path !== 'string' || !path) throw typeError(path, 'lucid-router.navigate expected a non empty string as its first parameter');
-    const m = match(path);
+    var m = match(path);
     if (m && notExternal(m)) {
-      const location = matchAndPathToLocation(m, path);
+      var location: ?RouterLocation = matchAndPathToLocation(m, path);
       if (replace) {
         history.replaceState(null, '', path);
       } else {
@@ -106,22 +144,26 @@ export function navigate(path, e, replace) {
   }
 }
 
-export function navigatorFor(path, replace) {
+export function navigatorFor(path: string, replace: ?bool): NavigationCallback {
   return e => navigate(path, e, replace);
 }
 
-export function register(callback) {
+export function register(callback: RouteMatchCallback): UnregisterLocationChangeCallback {
   if (typeof callback !== 'function') throw typeError(callback, 'lucid-router.register expects to be passed a callback function');
   locationChangeCallbacks.push(callback);
   return function unregister() {
-    const idx = locationChangeCallbacks.indexOf(callback);
+    var idx = locationChangeCallbacks.indexOf(callback);
     ~idx && locationChangeCallbacks.splice(idx, 1);
   };
 }
 
-function getFullPath(path) {
+function onLocationChange(location: ?RouterLocation): void {
+  locationChangeCallbacks.forEach(cb => cb(location));
+}
+
+function getFullPath(path: string): string {
   if (window) {
-    const a = window.document.createElement('a');
+    var a: HTMLAnchorElement = window.document.createElement('a');
     a.href = path;
     if (!a.host) a.href = a.href; /* IE hack */
     if (a.hostname === window.location.hostname) {
@@ -136,21 +178,21 @@ function getFullPath(path) {
   return path;
 }
 
-function getWindowPathAndQuery() {
-  const {location} = window;
+function getWindowPathAndQuery(): ?string {
+  var {location} = window;
   if (!location) return null;
   return location.pathname + location.search + location.hash;
 }
 
-export function getLocation(path) {
-  path = path || getWindowPathAndQuery();
-  const m = match(path);
-  const location = matchAndPathToLocation(m, path);
+export function getLocation(path: ?string): ?RouterLocation {
+  path = path || getWindowPathAndQuery() || '';
+  var m: ?RouterMatch = match(path);
+  var location = matchAndPathToLocation(m, path);
   onLocationChange(location);
   return location;
 }
 
-function matchAndPathToLocation(m, p) {
+function matchAndPathToLocation(m: ?RouterMatch, p: string): ?RouterLocation {
   return !m
     ? null
     : {
@@ -164,25 +206,24 @@ function matchAndPathToLocation(m, p) {
     };
 }
 
-function notExternal(m) {
-  const {external} = m.route;
+function notExternal(m: RouterMatch): boolean {
+  var {external} = m.route;
   if (typeof external === 'function') {
     return !external(m);
   } else return !external;
 }
 
 if (hasHistoryApi && window) {
-  window.addEventListener('popstate', function(e) {
-    const path = getWindowPathAndQuery();
-    const m = match(path);
+  window.addEventListener('popstate', function(e: Event) {
+    var path = getWindowPathAndQuery() || '';
+    var m: ?RouterMatch = match(path);
     if (m && notExternal(m)) {
-      const location = matchAndPathToLocation(m, path);
+      var location = matchAndPathToLocation(m, path);
       onLocationChange(location);
-      return;
     }
   }, false);
 }
 
-function typeError(type, msg) {
+function typeError(type: any, msg: string): TypeError {
   return new TypeError(msg + ' but got type `' + typeof type + '`!');
 }

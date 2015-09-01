@@ -1,3 +1,5 @@
+/* @flow */
+
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -27,37 +29,51 @@ var hasHistoryApi = window !== undefined && history !== undefined && typeof hist
 
 var locationChangeCallbacks = [];
 
-var onLocationChange = function onLocationChange(location) {
-  return locationChangeCallbacks.forEach(function (cb) {
-    return cb(location);
-  });
-};
-
 var routes = [];
 
 function addRoutes(newRoutes) {
-  if (!(routes instanceof Array)) throw typeError(routes, 'lucid-router expects to be passed a routing array as its first parameter');
-  for (var routeIdx in newRoutes) {
-    var route = newRoutes[routeIdx];
-    if (!(route instanceof Object)) throw typeError(routes, 'lucid-router expects each route definition to be an object');
-    route.path = route.path || null;
-    route.name = route.name || null;
-    route.external = typeof route.external === 'function' ? route.external : !!route.external;
-    try {
-      route.pattern = new _urlPattern2['default'](route.path);
-    } catch (err) {
-      throw typeError(route.path, 'lucid-router expects route paths to be a string or regex expression');
+  if (!(newRoutes instanceof Array)) throw typeError(routes, 'lucid-router expects to be passed a routing array as its first parameter');
+  var _iteratorNormalCompletion = true;
+  var _didIteratorError = false;
+  var _iteratorError = undefined;
+
+  try {
+    for (var _iterator = newRoutes[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+      var route = _step.value;
+
+      if (route === null || !(route instanceof Object)) throw typeError(routes, 'lucid-router expects each route definition to be an object');
+      route.path = route.path || null;
+      route.name = route.name || null;
+      route.external = typeof route.external === 'function' ? route.external : !!route.external;
+      try {
+        route.pattern = new _urlPattern2['default'](route.path);
+      } catch (err) {
+        throw typeError(route.path, 'lucid-router expects route paths to be a string or regex expression');
+      }
+      routes.push(route);
     }
-    routes.push(route);
+  } catch (err) {
+    _didIteratorError = true;
+    _iteratorError = err;
+  } finally {
+    try {
+      if (!_iteratorNormalCompletion && _iterator['return']) {
+        _iterator['return']();
+      }
+    } finally {
+      if (_didIteratorError) {
+        throw _iteratorError;
+      }
+    }
   }
 }
 
 function removeRoute(name) {
   if (!name) return;
   var idx = -1;
-  for (var routeIdx in routes) {
-    if (routes[routeIdx].name === name) {
-      idx = routeIdx;
+  for (var i = 0, l = routes.length; i < l; i++) {
+    if (routes[i].name === name) {
+      idx = i;
       break;
     }
   }
@@ -107,36 +123,42 @@ function match(path) {
   var hashSearch = _ref32[1];
 
   var state = parseQuery([search, hashSearch].join('&'));
+  var _iteratorNormalCompletion2 = true;
+  var _didIteratorError2 = false;
+  var _iteratorError2 = undefined;
 
-  var _loop = function (routeIdx) {
-    var route = routes[routeIdx];
-    var m = route.pattern.match(pathname);
-    if (!m) return 'continue';
-    Object.keys(m).forEach(function (key) {
-      return state[key] = m[key];
-    });
-    return {
-      v: {
+  try {
+    for (var _iterator2 = routes[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+      var route = _step2.value;
+
+      var m = route.pattern.match(pathname);
+      if (!m) continue;
+      Object.keys(m).forEach(function (key) {
+        return state[key] = m[key];
+      });
+      return {
         route: route,
         pathname: pathname,
         search: search ? '?'.concat(search) : '',
         hash: hash ? '#'.concat(hash) : '',
         hashSearch: hashSearch ? '?'.concat(hashSearch) : '',
-        state: state }
-    };
-  };
-
-  for (var routeIdx in routes) {
-    var _ret = _loop(routeIdx);
-
-    switch (_ret) {
-      case 'continue':
-        continue;
-
-      default:
-        if (typeof _ret === 'object') return _ret.v;
+        state: state };
+    }
+  } catch (err) {
+    _didIteratorError2 = true;
+    _iteratorError2 = err;
+  } finally {
+    try {
+      if (!_iteratorNormalCompletion2 && _iterator2['return']) {
+        _iterator2['return']();
+      }
+    } finally {
+      if (_didIteratorError2) {
+        throw _iteratorError2;
+      }
     }
   }
+
   return null;
 }
 
@@ -151,13 +173,13 @@ function navigate(path, e, replace) {
     if (typeof path !== 'string' || !path) throw typeError(path, 'lucid-router.navigate expected a non empty string as its first parameter');
     var m = match(path);
     if (m && notExternal(m)) {
-      var _location = matchAndPathToLocation(m, path);
+      var location = matchAndPathToLocation(m, path);
       if (replace) {
         history.replaceState(null, '', path);
       } else {
         history.pushState(null, '', path);
       }
-      onLocationChange(_location);
+      onLocationChange(location);
       return;
     }
   }
@@ -179,6 +201,12 @@ function register(callback) {
     var idx = locationChangeCallbacks.indexOf(callback);
     ~idx && locationChangeCallbacks.splice(idx, 1);
   };
+}
+
+function onLocationChange(location) {
+  locationChangeCallbacks.forEach(function (cb) {
+    return cb(location);
+  });
 }
 
 function getFullPath(path) {
@@ -207,7 +235,7 @@ function getWindowPathAndQuery() {
 }
 
 function getLocation(path) {
-  path = path || getWindowPathAndQuery();
+  path = path || getWindowPathAndQuery() || '';
   var m = match(path);
   var location = matchAndPathToLocation(m, path);
   onLocationChange(location);
@@ -236,12 +264,11 @@ function notExternal(m) {
 
 if (hasHistoryApi && window) {
   window.addEventListener('popstate', function (e) {
-    var path = getWindowPathAndQuery();
+    var path = getWindowPathAndQuery() || '';
     var m = match(path);
     if (m && notExternal(m)) {
-      var _location2 = matchAndPathToLocation(m, path);
-      onLocationChange(_location2);
-      return;
+      var location = matchAndPathToLocation(m, path);
+      onLocationChange(location);
     }
   }, false);
 }

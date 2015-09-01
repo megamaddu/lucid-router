@@ -1,8 +1,7 @@
 /* @flow */
 
-import urlPattern from 'url-pattern';
+import UrlPattern from 'url-pattern';
 
-var Pattern = (urlPattern: UrlPattern);
 var window: any  = global.window;
 var history: History = global.history;
 

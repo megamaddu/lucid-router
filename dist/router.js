@@ -50,7 +50,7 @@ function addRoutes(newRoutes) {
       route.name = route.name || null;
       route.external = typeof route.external === 'function' ? route.external : !!route.external;
       try {
-        route.pattern = new UrlPattern(route.path);
+        route.pattern = new Pattern(route.path);
       } catch (err) {
         throw typeError(route.path, 'lucid-router expects route paths to be a string or regex expression');
       }

@@ -2,9 +2,8 @@
 .*/lucid-router/dist/.*
 
 [include]
-.*/lucid-router/src/.*
 
 [libs]
-lib/
+./lib/
 
 [options]

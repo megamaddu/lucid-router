@@ -12,7 +12,7 @@ Too specialized?  What's that mean?
 - React Router
 - Express Router
 - Koa Router
-etc...
+- etc...
 
 Every framework has at least one router dedicated to _just_ that library, plus a few more from the community.
 I wanted a tool for abstracting the details from routing away from my app, not a tool that depends on the specific library I've chosen to build my app.

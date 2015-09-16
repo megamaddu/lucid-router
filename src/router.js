@@ -78,7 +78,7 @@ export function match(path: string): ?RouterMatch {
   return null;
 }
 
-export function navigate(path: string, e: ?Event, replace: ?boolean): void {
+export function navigate(path: string, e?: Event, replace?: boolean): void {
   if (e && e.defaultPrevented) return;
   if (e && e.preventDefault && e.stopPropagation) {
     e.preventDefault();
@@ -104,17 +104,25 @@ export function navigate(path: string, e: ?Event, replace: ?boolean): void {
   }
 }
 
-export function navigatorFor(path: string, replace: ?bool): NavigationCallback {
+export function navigatorFor(path: string, replace?: bool): NavigationCallback {
   return e => navigate(path, e, replace);
 }
 
-export function pathFor(routeName: string, params: Object): string {
+export function pathFor(routeName: string, params?: Object): string {
   for (var route of routes) {
     if (route.name === routeName) {
       return route.pattern.stringify(params);
     }
   }
   throw new Error(`lucid-router.pathFor failed to find a route with the name '${routeName}'`);
+}
+
+export function navigateToRoute(routeName: string, params?: Object, e?: Event): void {
+  navigate(pathFor(routeName, params), e);
+}
+
+export function navigatorForRoute(routeName: string, params?: Object): NavigationCallback {
+  return e => navigateToRoute(routeName, params, e);
 }
 
 export function register(callback: RouteMatchCallback): UnregisterLocationChangeCallback {

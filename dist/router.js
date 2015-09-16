@@ -1,5 +1,3 @@
-/* @flow */
-
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -16,6 +14,8 @@ exports.match = match;
 exports.navigate = navigate;
 exports.navigatorFor = navigatorFor;
 exports.pathFor = pathFor;
+exports.navigateToRoute = navigateToRoute;
+exports.navigatorForRoute = navigatorForRoute;
 exports.register = register;
 exports.getLocation = getLocation;
 
@@ -25,7 +25,6 @@ var _urlPattern = require('url-pattern');
 
 var _urlPattern2 = _interopRequireDefault(_urlPattern);
 
-var Pattern = _urlPattern2['default'];
 var window = global.window;
 var history = global.history;
 
@@ -50,7 +49,7 @@ function addRoutes(newRoutes) {
       route.name = route.name || null;
       route.external = typeof route.external === 'function' ? route.external : !!route.external;
       try {
-        route.pattern = new Pattern(route.path);
+        route.pattern = new _urlPattern2['default'](route.path);
       } catch (err) {
         throw typeError(route.path, 'lucid-router expects route paths to be a string or regex expression');
       }
@@ -224,6 +223,16 @@ function pathFor(routeName, params) {
   }
 
   throw new Error('lucid-router.pathFor failed to find a route with the name \'' + routeName + '\'');
+}
+
+function navigateToRoute(routeName, params, e) {
+  navigate(pathFor(routeName, params), e);
+}
+
+function navigatorForRoute(routeName, params) {
+  return function (e) {
+    return navigateToRoute(routeName, params, e);
+  };
 }
 
 function register(callback) {

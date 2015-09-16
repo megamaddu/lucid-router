@@ -4,8 +4,9 @@
   "description": "a simple html5-history aware router",
   "main": "dist/router.js",
   "scripts": {
-    "build": "babel src/router.js --out-file dist/router.js --stage 0",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "npm run build-router && npm run build-link",
+    "build-router": "babel src/router.js --out-file dist/router.js --stage 0",
+    "build-link": "babel src/link.js --out-file dist/link.js --stage 0"
   },
   "repository": {
     "type": "git",

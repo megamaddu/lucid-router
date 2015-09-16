@@ -4,12 +4,10 @@ Simple (lucid) html5 history-aware router.  Extracted from (and now being used b
 
 Thanks to `url-pattern` for all of the route/pattern work!
 
-## example
-
-### building a router
+## Configuration
 Require the router anywhere it will be used and add routes.  Routes are stored inside the `lucid-router` module, so it is safe to destructure or pass the router's functions around without any binding (see below).
 ```js
-var router = require('lucid-router');
+import router from 'lucid-router';
 
 router.addRoutes([
   {name: 'profile', path: '/profiles/:profileId'}, // required param
@@ -33,13 +31,13 @@ router.getLocation();
 router.getLocation(path);
 ```
 
-### subscribing to location changes
+## Subscribing to location changes
 Callbacks can be registered and un-registered at any time:
 ```js
 router.register(location => console.log(location));
 ```
 
-### navigating
+## Navigating
 Use `navigate` to perform an immediate transition to a given url (a string).  Use `navigatorFor` to build a callback bound to a particular path (equivalent to `e => navigate(path, e)`):
 ```js
 router.navigate('/path', e)     // => pass the event if you want it cancelled for you
@@ -57,7 +55,7 @@ This functionality is also available without performing a navigation:
 router.pathFor('profile', {profileId: 5}); // => returns '/profiles/5'
 ```
 
-### es6 module imports
+## ES2015 module imports
 This is safe and convenient:
 ```js
 import {pathFor, navigatorFor} from 'lucid-router';
@@ -66,5 +64,20 @@ const link = pathFor('route-name');
 const navigator = navigatorFor(link);
 ```
 
+## React
+Nothing about `lucid-router` is specific to React, but they make a great pair!  I've included a helper component for building anchor tags which you can import and use like so:
+```js
+import Link from 'lucid-router/link';
 
-Note.. I just pushed some code around and added some features which aren't finalized/tested, including the names of these functions.  I'll remove this message next time I push a version to NPM.
+class Nav extends React.Component {
+  render() {
+    return (
+      <nav>
+        <Link to="my-route" params={id: 9}>My Route</Link>
+        <Link href="/somewhere/else">Somewhere else</Link>
+      </nav>
+    );
+  }
+}
+```
+The first becomes an `<a>` with an `href` and `onClick` which defer to `pathFor` and `navigatorForRoute`.  The second just sets the `href` with the value provided and calls `navigate` when clicked.  `Link` is just a shortcut for the most common use cases, so you can use it, ignore it, or make your own!

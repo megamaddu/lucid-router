@@ -1,8 +1,33 @@
 # lucid-router
 
-Simple (lucid) html5 history-aware router.  Extracted from (and now being used by) a production React app for both client and server routing (gotta get that isomorphic buzz word in there).
+A simple (lucid) html5 history-aware router.
 
-Thanks to `url-pattern` for all of the route/pattern work!
+Another router??  Yup.  I see two problems with the current trends.
+Routers are too specialized and they're treated as some separate, almost magical part of getting a 'real' application built.
+
+Too specialized?  What's that mean?
+- Angular Router
+- Angular UI Router
+- Ember Router
+- React Router
+- Express Router
+- Koa Router
+etc...
+
+Every framework has at least one router dedicated to _just_ that library, plus a few more from the community.
+I wanted a tool for abstracting the details from routing away from my app, not a tool that depends on the specific library I've chosen to build my app.
+
+The second problem is a little harder to quantify.
+I think it comes from the Rails/Django/MVC patterns of views and layouts.
+This system tends to create a separation of _technology_ rather than a separation of _concerns_.
+A folder for every controller?  A folder for every view?
+No wonder those folders got too big and we needed to abstract common layouts...
+
+What if we organized it by concern: a folder for accounts, a folder for orders, etc.
+Then we have a central "app" that decides which of these to use at any given time.
+This is where the router comes in -- deciding which of these sections to defer to.
+
+--- todo, finish/condense this (maybe put it at the end?)
 
 ## Configuration
 Require the router anywhere it will be used and add routes.  Routes are stored inside the `lucid-router` module, so it is safe to destructure or pass the router's functions around without any binding (see below).
@@ -32,10 +57,12 @@ router.getLocation(path);
 ```
 
 ## Subscribing to location changes
-Callbacks can be registered and un-registered at any time:
+This is where the magic happens.  Use this function to call `React.render` or wrap it with a Flux store so your components can subscribe to changes.  Better yet, reserve a spot for it in your global app state and make your whole app a function from `state -> UI`!
 ```js
 router.register(location => console.log(location));
 ```
+
+Callbacks can be registered and un-registered at any time, during an app's lifecycle (think dynamically loaded sections of a large app).  Unregister by calling the callback returned from `router.register`.
 
 ## Navigating
 Use `navigate` to perform an immediate transition to a given url (a string).  Use `navigatorFor` to build a callback bound to a particular path (equivalent to `e => navigate(path, e)`):
@@ -81,3 +108,8 @@ class Nav extends React.Component {
 }
 ```
 The first becomes an `<a>` with an `href` and `onClick` which defer to `pathFor` and `navigatorForRoute`.  The second just sets the `href` with the value provided and calls `navigate` when clicked.  `Link` is just a shortcut for the most common use cases, so you can use it, ignore it, or make your own!
+
+
+## Thanks
+
+Thanks to [url-pattern](https://github.com/snd/url-pattern) for all of the route/pattern work!

@@ -17,6 +17,9 @@
     "router",
     "routing",
     "history",
+    "html5",
+    "isomorphic",
+    "universal",
     "react"
   ],
   "author": "Michael Trotter",
@@ -26,7 +29,7 @@
   },
   "homepage": "https://github.com/spicydonuts/lucid-router",
   "dependencies": {
-    "url-pattern": "^0.10.0"
+    "url-pattern": "0.10.2"
   },
   "devDependencies": {
     "babel": "^5.5.6"

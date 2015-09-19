@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>lucid-router basics</title>
+  <style>
+    * {margin: 0; padding: 0; box-sizing: border-box;}
+    body {font-family: 'Helvetica Neue', Helvetica, sans-serif; color: #555;}
+    pre {font-family: "Source Code Pro", Monaco, "Courier New";}
+    header {height: 60px; box-shadow: 0 2px 3px 0 rgba(0, 0, 0, .2); background-color: rgb(41, 174, 204);}
+    nav, section {max-width: 600px; margin: 0 auto; padding: 20px;}
+    nav {display: flex; justify-content: space-between; height: 100%;}
+    nav a {font-weight: 500; color: #eee; cursor: pointer;}
+  </style>
+  <script defer src="jspm_packages/system.js"></script>
+  <script defer src="config.js" onload="System.import('app.js')"></script>
+</head>
+<body>
+  <header>
+    <nav>
+      <a onclick="navigate('/')">Home</a>
+      <a onclick="navigate('/friends')">Friends</a>
+      <a onclick="navigate('/friends/alice')">Alice</a>
+      <a onclick="navigate('/friends/bob')">Bob</a>
+      <a onclick="navigate('https://github.com/spicydonuts/lucid-router')">Github</a>
+    </nav>
+  </header>
+  <section>
+    <h3>You are here:</h3>
+    <pre id="route-data"></pre>
+  </section>
+</body>
+</html>

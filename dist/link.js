@@ -62,7 +62,7 @@ var Link = (function (_React$Component) {
       return _react2['default'].createElement(
         'a',
         _extends({ href: linkTo, onClick: this.onClick.bind(this) }, props),
-        'children'
+        children
       );
     }
   }]);

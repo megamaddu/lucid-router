@@ -1,14 +1,18 @@
 # lucid-router basic example
-
-This example uses `jspm` and is easy to run with `serve`:
+This example uses `jspm` and `express`, which `npm` will grab for you:
 ```sh
-npm install -g jspm serve
+npm install
 ```
-Next install the example's dependencies:
+Then run express with:
 ```sh
-jspm install
+npm start
 ```
 Then head to `localhost:3000`.
+You could also just use `serve` or something instead of `express`, but then you'd get a 404 if you navigated to `/friends` and then refreshed.
+: ]
+
+All the configuration bits are in the [app.js](https://github.com/spicydonuts/lucid-router/blob/master/examples/basics/app.js) file.
+All navigation is in [index.html](https://github.com/spicydonuts/lucid-router/blob/master/examples/basics/index.html).
 
 Notice the link to Github is not in the routing table, so a normal redirect is performed.
 Also notice when you're on one of the specific friend routes (like /friends/alice) that the `:name` key in the route overrides the `name` query param.

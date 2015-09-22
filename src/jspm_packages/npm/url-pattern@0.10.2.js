@@ -1,0 +1,1 @@
+module.exports = require("npm:url-pattern@0.10.2/lib/url-pattern");

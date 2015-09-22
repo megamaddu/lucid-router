@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for src/router.spec.js</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../prettify.css">
+    <link rel="stylesheet" href="../base.css">
+    <style type='text/css'>
+        div.coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class="header high">
+    <h1>Code coverage report for <span class="entity">src/router.spec.js</span></h1>
+    <h2>
+        Statements: <span class="metric">100% <small>(16 / 16)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Branches: <span class="metric">100% <small>(0 / 0)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Functions: <span class="metric">100% <small>(9 / 9)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Lines: <span class="metric">100% <small>(16 / 16)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Ignored: <span class="metric"><span class="ignore-none">none</span></span> &nbsp;&nbsp;&nbsp;&nbsp;
+    </h2>
+    <div class="path"><a href="../index.html">All files</a> &#187; <a href="index.html">src/</a> &#187; router.spec.js</div>
+</div>
+<div class="body">
+<pre><table class="coverage">
+<tr><td class="line-count">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30</td><td class="line-coverage"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">'use strict';
+&nbsp;
+var _router = require('./router');
+&nbsp;
+describe('lucid-router', function () {
+  it('addRoutes', function () {
+    expect(function () {
+      return (0, _router.addRoutes)();
+    }).toThrowError();
+    expect(function () {
+      return (0, _router.addRoutes)([]);
+    }).not.toThrowError();
+    expect(function () {
+      return (0, _router.addRoutes)([null]);
+    }).toThrowError();
+    expect(function () {
+      return (0, _router.addRoutes)([{ name: 'a' }]);
+    }).toThrowError();
+    expect(function () {
+      return (0, _router.addRoutes)([{ name: 'a', path: '/a' }]);
+    }).not.toThrowError();
+  });
+&nbsp;
+  it('removeRoute', function () {
+    expect(function () {
+      return removeRoute('a');
+    }).not.toThrowError();
+  });
+});
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy90cm90dGVyL2Rldi9naXRodWIvbHVjaWQtcm91dGVyL3NyYy9yb3V0ZXIuc3BlYy5qcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOztzQkFBd0IsVUFBVTs7QUFFbEMsUUFBUSxDQUFDLGNBQWMsRUFBRSxZQUFNO0FBQzdCLElBQUUsQ0FBQyxXQUFXLEVBQUUsWUFBTTtBQUNwQixVQUFNLENBQUM7YUFBTSx3QkFBVztLQUFBLENBQUMsQ0FBQyxZQUFZLEVBQUUsQ0FBQTtBQUN4QyxVQUFNLENBQUM7YUFBTSx1QkFBVSxFQUFFLENBQUM7S0FBQSxDQUFDLENBQUMsR0FBRyxDQUFDLFlBQVksRUFBRSxDQUFBO0FBQzlDLFVBQU0sQ0FBQzthQUFNLHVCQUFVLENBQUMsSUFBSSxDQUFDLENBQUM7S0FBQSxDQUFDLENBQUMsWUFBWSxFQUFFLENBQUE7QUFDOUMsVUFBTSxDQUFDO2FBQU0sdUJBQVUsQ0FBQyxFQUFDLElBQUksRUFBRSxHQUFHLEVBQUMsQ0FBQyxDQUFDO0tBQUEsQ0FBQyxDQUFDLFlBQVksRUFBRSxDQUFBO0FBQ3JELFVBQU0sQ0FBQzthQUFNLHVCQUFVLENBQUMsRUFBQyxJQUFJLEVBQUUsR0FBRyxFQUFFLElBQUksRUFBRSxJQUFJLEVBQUMsQ0FBQyxDQUFDO0tBQUEsQ0FBQyxDQUFDLEdBQUcsQ0FBQyxZQUFZLEVBQUUsQ0FBQTtHQUN0RSxDQUFDLENBQUE7O0FBRUYsSUFBRSxDQUFDLGFBQWEsRUFBRSxZQUFNO0FBQ3RCLFVBQU0sQ0FBQzthQUFNLFdBQVcsQ0FBQyxHQUFHLENBQUM7S0FBQSxDQUFDLENBQUMsR0FBRyxDQUFDLFlBQVksRUFBRSxDQUFBO0dBQ2xELENBQUMsQ0FBQTtDQUNILENBQUMsQ0FBQSIsImZpbGUiOiIvVXNlcnMvdHJvdHRlci9kZXYvZ2l0aHViL2x1Y2lkLXJvdXRlci9zcmMvcm91dGVyLnNwZWMuanMiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQge2FkZFJvdXRlc30gZnJvbSAnLi9yb3V0ZXInXG5cbmRlc2NyaWJlKCdsdWNpZC1yb3V0ZXInLCAoKSA9PiB7XG4gIGl0KCdhZGRSb3V0ZXMnLCAoKSA9PiB7XG4gICAgZXhwZWN0KCgpID0+IGFkZFJvdXRlcygpKS50b1Rocm93RXJyb3IoKVxuICAgIGV4cGVjdCgoKSA9PiBhZGRSb3V0ZXMoW10pKS5ub3QudG9UaHJvd0Vycm9yKClcbiAgICBleHBlY3QoKCkgPT4gYWRkUm91dGVzKFtudWxsXSkpLnRvVGhyb3dFcnJvcigpXG4gICAgZXhwZWN0KCgpID0+IGFkZFJvdXRlcyhbe25hbWU6ICdhJ31dKSkudG9UaHJvd0Vycm9yKClcbiAgICBleHBlY3QoKCkgPT4gYWRkUm91dGVzKFt7bmFtZTogJ2EnLCBwYXRoOiAnL2EnfV0pKS5ub3QudG9UaHJvd0Vycm9yKClcbiAgfSlcblxuICBpdCgncmVtb3ZlUm91dGUnLCAoKSA9PiB7XG4gICAgZXhwZWN0KCgpID0+IHJlbW92ZVJvdXRlKCdhJykpLm5vdC50b1Rocm93RXJyb3IoKVxuICB9KVxufSlcbiJdfQ==</pre></td></tr>
+</table></pre>
+
+</div>
+<div class="footer">
+    <div class="meta">Generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon Sep 21 2015 23:12:44 GMT-0600 (MDT)</div>
+</div>
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../sorter.js"></script>
+</body>
+</html>

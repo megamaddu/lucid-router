@@ -1,4 +1,5 @@
 import React from 'react'
+import ReactDOM from 'react-dom'
 import * as router from 'lucid-router'
 import App from './components/App'
 
@@ -13,5 +14,5 @@ router.register(location => render(location))
 render(router.getLocation())
 
 function render(location) {
-  React.render(<App location={location} />, document.body)
+  ReactDOM.render(<App location={location} />, document.body)
 }

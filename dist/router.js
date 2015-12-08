@@ -163,7 +163,6 @@ function match(path) {
 }
 
 function navigate(path, e, replace) {
-  if (e && e.defaultPrevented) return;
   if (e && e.preventDefault && e.stopPropagation) {
     e.preventDefault();
     e.stopPropagation();

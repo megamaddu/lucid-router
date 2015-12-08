@@ -79,7 +79,6 @@ export function match(path: string): ?RouterMatch {
 }
 
 export function navigate(path: string, e?: Event, replace?: boolean): void {
-  if (e && e.defaultPrevented) return;
   if (e && e.preventDefault && e.stopPropagation) {
     e.preventDefault();
     e.stopPropagation();

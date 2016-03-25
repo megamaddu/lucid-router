@@ -1,12 +1,14 @@
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i['return']) _i['return'](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError('Invalid attempt to destructure non-iterable instance'); } }; })();
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
 exports.addRoutes = addRoutes;
 exports.removeRoute = removeRoute;
@@ -19,11 +21,11 @@ exports.navigatorForRoute = navigatorForRoute;
 exports.register = register;
 exports.getLocation = getLocation;
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
 var _urlPattern = require('url-pattern');
 
 var _urlPattern2 = _interopRequireDefault(_urlPattern);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var window = global.window;
 var history = global.history;
@@ -49,7 +51,7 @@ function addRoutes(newRoutes) {
       route.name = route.name || null;
       route.external = typeof route.external === 'function' ? route.external : !!route.external;
       try {
-        route.pattern = new _urlPattern2['default'](route.path);
+        route.pattern = new _urlPattern2.default(route.path);
       } catch (err) {
         throw typeError(route.path, 'lucid-router expects route paths to be a string or regex expression');
       }
@@ -60,8 +62,8 @@ function addRoutes(newRoutes) {
     _iteratorError = err;
   } finally {
     try {
-      if (!_iteratorNormalCompletion && _iterator['return']) {
-        _iterator['return']();
+      if (!_iteratorNormalCompletion && _iterator.return) {
+        _iterator.return();
       }
     } finally {
       if (_didIteratorError) {
@@ -110,19 +112,19 @@ function match(path) {
   var pathnameAndQuery = _path$split2[0];
   var hashAndHashQuery = _path$split2[1];
 
-  var _pathnameAndQuery$split = pathnameAndQuery.split('?');
+  var _pathnameAndQuery$spl = pathnameAndQuery.split('?');
 
-  var _pathnameAndQuery$split2 = _slicedToArray(_pathnameAndQuery$split, 2);
+  var _pathnameAndQuery$spl2 = _slicedToArray(_pathnameAndQuery$spl, 2);
 
-  var pathname = _pathnameAndQuery$split2[0];
-  var search = _pathnameAndQuery$split2[1];
+  var pathname = _pathnameAndQuery$spl2[0];
+  var search = _pathnameAndQuery$spl2[1];
 
   var _ref3 = hashAndHashQuery ? hashAndHashQuery.split('?') : [];
 
-  var _ref32 = _slicedToArray(_ref3, 2);
+  var _ref4 = _slicedToArray(_ref3, 2);
 
-  var hash = _ref32[0];
-  var hashSearch = _ref32[1];
+  var hash = _ref4[0];
+  var hashSearch = _ref4[1];
 
   var queryState = parseQuery([search, hashSearch].join('&'));
   var _iteratorNormalCompletion2 = true;
@@ -149,8 +151,8 @@ function match(path) {
     _iteratorError2 = err;
   } finally {
     try {
-      if (!_iteratorNormalCompletion2 && _iterator2['return']) {
-        _iterator2['return']();
+      if (!_iteratorNormalCompletion2 && _iterator2.return) {
+        _iterator2.return();
       }
     } finally {
       if (_didIteratorError2) {
@@ -163,10 +165,6 @@ function match(path) {
 }
 
 function navigate(path, e, replace) {
-  if (e && e.preventDefault && e.stopPropagation) {
-    e.preventDefault();
-    e.stopPropagation();
-  }
   path = getFullPath(path);
   if (hasHistoryApi) {
     if (typeof path !== 'string' || !path) throw typeError(path, 'lucid-router.navigate expected a non empty string as its first parameter');
@@ -178,11 +176,17 @@ function navigate(path, e, replace) {
       } else {
         history.pushState(null, '', path);
       }
+
+      if (e && e.preventDefault) {
+        e.preventDefault();
+      }
+
       onLocationChange(location);
       return;
     }
   }
-  if (window) {
+
+  if (window && (!e || !e.target || !e.target.tagName !== 'A')) {
     window.location = path;
   }
 }
@@ -211,8 +215,8 @@ function pathFor(routeName, params) {
     _iteratorError3 = err;
   } finally {
     try {
-      if (!_iteratorNormalCompletion3 && _iterator3['return']) {
-        _iterator3['return']();
+      if (!_iteratorNormalCompletion3 && _iterator3.return) {
+        _iterator3.return();
       }
     } finally {
       if (_didIteratorError3) {
@@ -314,5 +318,5 @@ if (hasHistoryApi && window) {
 }
 
 function typeError(type, msg) {
-  return new TypeError(msg + ' but got type `' + typeof type + '`!');
+  return new TypeError(msg + ' but got type `' + (typeof type === 'undefined' ? 'undefined' : _typeof(type)) + '`!');
 }

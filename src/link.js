@@ -2,7 +2,12 @@ import React from 'react';
 import {pathFor,navigate,navigateToRoute} from 'lucid-router';
 
 export default class Link extends React.Component {
-  onClick(e) {
+  constructor (props) {
+    super(props)
+    this._onClick = this._onClick.bind(this)
+  }
+
+  _onClick (e) {
     const {to,params,href} = this.props;
     if (to) {
       navigateToRoute(to, params, e);
@@ -11,9 +16,9 @@ export default class Link extends React.Component {
     }
   }
 
-  render() {
-    const {to,params,href,children,...props} = this.props;
+  render () {
+    const {to, params, href, children, ...props} = this.props;
     const linkTo = to ? pathFor(to, params) : href;
-    return <a href={linkTo} onClick={::this.onClick} {...props}>{children}</a>;
+    return <a href={linkTo} onClick={this._onClick} {...props}>{children}</a>;
   }
 }

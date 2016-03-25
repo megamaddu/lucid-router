@@ -69,9 +69,9 @@ export function match(path: string): ?RouterMatch {
     return {
       route,
       pathname,
-      search: search?'?'.concat(search):'',
-      hash: hash?'#'.concat(hash):'',
-      hashSearch: hashSearch?'?'.concat(hashSearch):'',
+      search: search ? '?'.concat(search) : '',
+      hash: hash ? '#'.concat(hash) : '',
+      hashSearch: hashSearch ? '?'.concat(hashSearch) : '',
       state: {...queryState, ...matchState}
     };
   }
@@ -79,10 +79,6 @@ export function match(path: string): ?RouterMatch {
 }
 
 export function navigate(path: string, e?: Event, replace?: boolean): void {
-  if (e && e.preventDefault && e.stopPropagation) {
-    e.preventDefault();
-    e.stopPropagation();
-  }
   path = getFullPath(path);
   if (hasHistoryApi) {
     if (typeof path !== 'string' || !path) throw typeError(path, 'lucid-router.navigate expected a non empty string as its first parameter');
@@ -94,12 +90,18 @@ export function navigate(path: string, e?: Event, replace?: boolean): void {
       } else {
         history.pushState(null, '', path);
       }
+
+      if (e && e.preventDefault) {
+        e.preventDefault();
+      }
+
       onLocationChange(location);
       return;
     }
   }
-  if (window) {
-    (window.location = path);
+
+  if (window && (!e || !e.target || !e.target.tagName !== 'A')) {
+    window.location = path;
   }
 }
 

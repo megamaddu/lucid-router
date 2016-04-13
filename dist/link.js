@@ -92,7 +92,7 @@ var Link = function (_React$Component) {
       var linkTo = to ? (0, _lucidRouter.pathFor)(to, params) : href;
       return _react2.default.createElement(
         'a',
-        _extends({ href: linkTo, onClick: this._onClick }, props),
+        _extends({}, props, { href: linkTo, onClick: this.onClick }),
         children
       );
     }

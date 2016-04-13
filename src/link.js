@@ -44,6 +44,6 @@ export default class Link extends React.Component {
   render () {
     const {to, params, href, children, ...props} = this.props;
     const linkTo = to ? pathFor(to, params) : href;
-    return <a href={linkTo} onClick={this._onClick} {...props}>{children}</a>;
+    return <a {...props} href={linkTo} onClick={this.onClick}>{children}</a>;
   }
 }

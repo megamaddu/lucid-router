@@ -33,6 +33,7 @@
   },
   "devDependencies": {
     "babel-cli": "^6.6.5",
+    "babel-plugin-transform-class-properties": "^6.6.0",
     "babel-plugin-transform-export-extensions": "^6.5.0",
     "babel-plugin-transform-flow-strip-types": "^6.7.0",
     "babel-plugin-transform-react-constant-elements": "^6.5.0",

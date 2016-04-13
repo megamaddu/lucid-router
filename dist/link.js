@@ -24,42 +24,70 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+function isLeftClickEvent(e) {
+  return e.button === 0;
+}
+
+function isModifiedEvent(e) {
+  return Boolean(e.metaKey || e.altKey || e.ctrlKey || e.shiftKey);
+}
+
 var Link = function (_React$Component) {
   _inherits(Link, _React$Component);
 
-  function Link(props) {
+  function Link() {
+    var _Object$getPrototypeO;
+
+    var _temp, _this, _ret;
+
     _classCallCheck(this, Link);
 
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Link).call(this, props));
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
 
-    _this._onClick = _this._onClick.bind(_this);
-    return _this;
+    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(Link)).call.apply(_Object$getPrototypeO, [this].concat(args))), _this), _this.onClick = function (e) {
+      var _this$props = _this.props;
+      var onClick = _this$props.onClick;
+      var target = _this$props.target;
+
+      var allowTransition = true;
+
+      if (onClick instanceof Function) onClick(e);
+
+      if (isModifiedEvent(e) || !isLeftClickEvent(e)) return;
+
+      if (e.defaultPrevented === true) allowTransition = false;
+
+      if (target) {
+        if (!allowTransition) e.preventDefault();
+
+        return;
+      }
+
+      e.preventDefault();
+
+      if (allowTransition) {
+        var _this$props2 = _this.props;
+        var to = _this$props2.to;
+        var params = _this$props2.params;
+        var href = _this$props2.href;
+
+        if (to) (0, _lucidRouter.navigateToRoute)(to, params, e);else (0, _lucidRouter.navigate)(href, e);
+      }
+    }, _temp), _possibleConstructorReturn(_this, _ret);
   }
 
   _createClass(Link, [{
-    key: '_onClick',
-    value: function _onClick(e) {
+    key: 'render',
+    value: function render() {
       var _props = this.props;
       var to = _props.to;
       var params = _props.params;
       var href = _props.href;
+      var children = _props.children;
 
-      if (to) {
-        (0, _lucidRouter.navigateToRoute)(to, params, e);
-      } else {
-        (0, _lucidRouter.navigate)(href, e);
-      }
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      var _props2 = this.props;
-      var to = _props2.to;
-      var params = _props2.params;
-      var href = _props2.href;
-      var children = _props2.children;
-
-      var props = _objectWithoutProperties(_props2, ['to', 'params', 'href', 'children']);
+      var props = _objectWithoutProperties(_props, ['to', 'params', 'href', 'children']);
 
       var linkTo = to ? (0, _lucidRouter.pathFor)(to, params) : href;
       return _react2.default.createElement(

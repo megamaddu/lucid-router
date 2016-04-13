@@ -14,7 +14,7 @@
   },
   "jspm": {
     "dependencies": {
-      "lucid-router": "npm:lucid-router@^1.2.0-0"
+      "lucid-router": "npm:lucid-router@1.3.3"
     },
     "devDependencies": {
       "babel": "npm:babel-core@^5.8.24",

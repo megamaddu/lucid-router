@@ -18,7 +18,7 @@ System.config({
     "babel-runtime": "npm:babel-runtime@5.8.24",
     "core-js": "npm:core-js@1.2.3",
     "json-loader": "npm:json-loader@0.5.3",
-    "lucid-router": "npm:lucid-router@1.2.1",
+    "lucid-router": "npm:lucid-router@1.3.3",
     "react": "npm:react@0.14.0",
     "react-dom": "npm:react-dom@0.14.0",
     "github:jspm/nodelibs-assert@0.1.0": {
@@ -112,9 +112,9 @@ System.config({
       "stream": "github:jspm/nodelibs-stream@0.1.0",
       "util": "github:jspm/nodelibs-util@0.1.0"
     },
-    "npm:lucid-router@1.2.1": {
+    "npm:lucid-router@1.3.3": {
       "process": "github:jspm/nodelibs-process@0.1.2",
-      "url-pattern": "npm:url-pattern@0.10.2"
+      "url-pattern": "npm:url-pattern@1.0.1"
     },
     "npm:path-browserify@0.0.0": {
       "process": "github:jspm/nodelibs-process@0.1.2"

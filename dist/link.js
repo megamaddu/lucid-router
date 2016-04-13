@@ -1,76 +1,54 @@
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = require('react');
-
-var _react2 = _interopRequireDefault(_react);
-
-var _lucidRouter = require('lucid-router');
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Link = function (_React$Component) {
-  _inherits(Link, _React$Component);
-
-  function Link(props) {
-    _classCallCheck(this, Link);
-
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Link).call(this, props));
-
-    _this._onClick = _this._onClick.bind(_this);
-    return _this;
-  }
-
-  _createClass(Link, [{
-    key: '_onClick',
-    value: function _onClick(e) {
-      var _props = this.props;
-      var to = _props.to;
-      var params = _props.params;
-      var href = _props.href;
-
-      if (to) {
-        (0, _lucidRouter.navigateToRoute)(to, params, e);
-      } else {
-        (0, _lucidRouter.navigate)(href, e);
-      }
+"use strict";
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+var react_1 = require("react");
+var lucid_router_1 = require("lucid-router");
+var assign = require("object-assign");
+function isLeftClickEvent(e) {
+    return e.button === 0;
+}
+function isModifiedEvent(e) {
+    return Boolean(e.metaKey || e.altKey || e.ctrlKey || e.shiftKey);
+}
+var Link = (function (_super) {
+    __extends(Link, _super);
+    function Link(props) {
+        _super.call(this, props);
+        this._onClick = this._onClick.bind(this);
     }
-  }, {
-    key: 'render',
-    value: function render() {
-      var _props2 = this.props;
-      var to = _props2.to;
-      var params = _props2.params;
-      var href = _props2.href;
-      var children = _props2.children;
-
-      var props = _objectWithoutProperties(_props2, ['to', 'params', 'href', 'children']);
-
-      var linkTo = to ? (0, _lucidRouter.pathFor)(to, params) : href;
-      return _react2.default.createElement(
-        'a',
-        _extends({ href: linkTo, onClick: this._onClick }, props),
-        children
-      );
-    }
-  }]);
-
-  return Link;
-}(_react2.default.Component);
-
-exports.default = Link;
+    Link.prototype._onClick = function (e) {
+        var _a = this.props, onClick = _a.onClick, target = _a.target;
+        var allowTransition = true;
+        if (onClick instanceof Function)
+            onClick(e);
+        if (isModifiedEvent(e) || !isLeftClickEvent(e))
+            return;
+        if (e.defaultPrevented === true)
+            allowTransition = false;
+        if (target) {
+            if (!allowTransition)
+                e.preventDefault();
+            return;
+        }
+        e.preventDefault();
+        if (allowTransition) {
+            var _b = this.props, to = _b.to, params = _b.params, href = _b.href;
+            if (to)
+                lucid_router_1.navigateToRoute(to, params, e);
+            else
+                lucid_router_1.navigate(href, e);
+        }
+    };
+    Link.prototype.render = function () {
+        var _a = this.props, to = _a.to, params = _a.params, href = _a.href, children = _a.children;
+        var linkTo = to ? lucid_router_1.pathFor(to, params) : href;
+        return react_1["default"].createComponent('a', assign({}, props, { href: linkTo, onClick: this._onClick }), children);
+    };
+    return Link;
+}(react_1["default"].Component));
+exports.__esModule = true;
+exports["default"] = Link;
+//# sourceMappingURL=link.js.map

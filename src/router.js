@@ -100,7 +100,7 @@ export function navigate(path: string, e?: Event, replace?: boolean): void {
     }
   }
 
-  if (window && (!e || !e.target || !e.target.tagName !== 'A')) {
+  if (window && (!e || !e.target)) {
     window.location = path;
   }
 }

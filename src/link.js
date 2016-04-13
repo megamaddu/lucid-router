@@ -1,18 +1,43 @@
 import React from 'react';
 import {pathFor,navigate,navigateToRoute} from 'lucid-router';
 
-export default class Link extends React.Component {
-  constructor (props) {
-    super(props)
-    this._onClick = this._onClick.bind(this)
-  }
+function isLeftClickEvent(e) {
+  return e.button === 0;
+}
 
-  _onClick (e) {
-    const {to,params,href} = this.props;
-    if (to) {
-      navigateToRoute(to, params, e);
-    } else {
-      navigate(href, e);
+function isModifiedEvent(e) {
+  return Boolean(e.metaKey || e.altKey || e.ctrlKey || e.shiftKey);
+}
+
+export default class Link extends React.Component {
+  onClick = (e) => {
+    const {onClick, target} = this.props;
+    let allowTransition = true;
+
+    if (onClick instanceof Function)
+      onClick(e);
+
+    if (isModifiedEvent(e) || !isLeftClickEvent(e))
+      return;
+
+    if (e.defaultPrevented === true)
+      allowTransition = false;
+
+    if (target) {
+      if (!allowTransition)
+        e.preventDefault();
+
+      return;
+    }
+
+    e.preventDefault();
+
+    if (allowTransition) {
+      const {to, params, href} = this.props;
+      if (to)
+        navigateToRoute(to, params, e);
+      else
+        navigate(href, e);
     }
   }
 

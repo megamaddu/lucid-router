@@ -18,7 +18,7 @@ System.config({
     "babel-runtime": "npm:babel-runtime@5.8.38",
     "core-js": "npm:core-js@1.2.6",
     "json-loader": "npm:json-loader@0.5.4",
-    "lucid-router": "npm:lucid-router@1.3.4",
+    "lucid-router": "npm:lucid-router@1.3.5",
     "react": "npm:react@0.14.8",
     "react-dom": "npm:react-dom@0.14.8",
     "github:jspm/nodelibs-assert@0.1.0": {
@@ -51,7 +51,7 @@ System.config({
     "npm:inherits@2.0.1": {
       "util": "github:jspm/nodelibs-util@0.1.0"
     },
-    "npm:lucid-router@1.3.4": {
+    "npm:lucid-router@1.3.5": {
       "process": "github:jspm/nodelibs-process@0.1.2",
       "url-pattern": "npm:url-pattern@1.0.1"
     },

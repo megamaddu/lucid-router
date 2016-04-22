@@ -65,8 +65,6 @@ var Link = function (_React$Component) {
         return;
       }
 
-      e.preventDefault();
-
       if (allowTransition) {
         var _this$props2 = _this.props;
         var to = _this$props2.to;

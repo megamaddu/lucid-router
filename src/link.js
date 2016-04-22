@@ -30,8 +30,6 @@ export default class Link extends React.Component {
       return;
     }
 
-    e.preventDefault();
-
     if (allowTransition) {
       const {to, params, href} = this.props;
       if (to)

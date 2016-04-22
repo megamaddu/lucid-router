@@ -186,8 +186,13 @@ function navigate(path, e, replace) {
     }
   }
 
-  if (window && (!e || !e.target)) {
-    window.location = path;
+  if (window) {
+    if (!e) window.location = path;else {
+      var target = e.target;
+      if (!target || target.tagName !== 'A') {
+        window.location = path;
+      }
+    }
   }
 }
 

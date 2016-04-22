@@ -100,8 +100,14 @@ export function navigate(path: string, e?: Event, replace?: boolean): void {
     }
   }
 
-  if (window && (!e || !e.target)) {
-    window.location = path;
+  if (window) {
+    if (!e) window.location = path;
+    else {
+      const target = ((e.target : any) : ?Element);
+      if (!target || target.tagName !== 'A') {
+        window.location = path;
+      }
+    }
   }
 }
 

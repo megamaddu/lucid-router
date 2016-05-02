@@ -78,8 +78,8 @@ export function match(path: string): ?RouterMatch {
   return null;
 }
 
-export function navigate(path: string, e?: Event, replace?: boolean): void {
-  path = getFullPath(path);
+export function navigate(path: ?string, e?: Event, replace?: boolean): void {
+  path = getFullPath(path || '');
   if (hasHistoryApi) {
     if (typeof path !== 'string' || !path) throw typeError(path, 'lucid-router.navigate expected a non empty string as its first parameter');
     var m = match(path);

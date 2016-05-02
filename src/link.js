@@ -34,7 +34,7 @@ export default class Link extends React.Component {
       const {to, params, href} = this.props;
       if (to)
         navigateToRoute(to, params, e);
-      else
+      else if (href != null)
         navigate(href, e);
     }
   }

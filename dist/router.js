@@ -165,7 +165,7 @@ function match(path) {
 }
 
 function navigate(path, e, replace) {
-  path = getFullPath(path);
+  path = getFullPath(path || '');
   if (hasHistoryApi) {
     if (typeof path !== 'string' || !path) throw typeError(path, 'lucid-router.navigate expected a non empty string as its first parameter');
     var m = match(path);

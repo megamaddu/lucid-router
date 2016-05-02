@@ -71,7 +71,7 @@ var Link = function (_React$Component) {
         var params = _this$props2.params;
         var href = _this$props2.href;
 
-        if (to) (0, _lucidRouter.navigateToRoute)(to, params, e);else (0, _lucidRouter.navigate)(href, e);
+        if (to) (0, _lucidRouter.navigateToRoute)(to, params, e);else if (href != null) (0, _lucidRouter.navigate)(href, e);
       }
     }, _temp), _possibleConstructorReturn(_this, _ret);
   }

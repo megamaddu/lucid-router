@@ -186,7 +186,8 @@ function matchAndPathToLocation(m: ?RouterMatch, p: string): ?RouterLocation {
       search: m.search,
       hash: m.hash,
       hashSearch: m.hashSearch,
-      state: m.state
+      state: m.state,
+      route: m.route
     };
 }
 

@@ -1,6 +1,6 @@
 {
   "name": "lucid-router",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "a simple html5-history aware router",
   "main": "dist/router.js",
   "scripts": {

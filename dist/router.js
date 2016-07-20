@@ -286,9 +286,7 @@ function getWindowPathAndQuery() {
 function getLocation(path) {
   path = path || getWindowPathAndQuery() || '';
   var m = match(path);
-  var location = matchAndPathToLocation(m, path);
-  onLocationChange(location);
-  return location;
+  return matchAndPathToLocation(m, path);
 }
 
 function matchAndPathToLocation(m, p) {

@@ -171,9 +171,7 @@ function getWindowPathAndQuery(): ?string {
 export function getLocation(path: ?string): ?RouterLocation {
   path = path || getWindowPathAndQuery() || '';
   var m: ?RouterMatch = match(path);
-  var location = matchAndPathToLocation(m, path);
-  onLocationChange(location);
-  return location;
+  return matchAndPathToLocation(m, path);
 }
 
 function matchAndPathToLocation(m: ?RouterMatch, p: string): ?RouterLocation {
